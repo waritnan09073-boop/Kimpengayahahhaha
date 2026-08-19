@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>เกมตอบคำถามด้วยมือ</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, "Noto Sans Thai", sans-serif;
+    background: #111827;
+    color: white;
+    overflow: hidden;
+}
+
+.screen {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ================= MENU ================= */
+
+#menu {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background:
+        radial-gradient(circle at top, #2563eb, transparent 45%),
+        #111827;
+    text-align: center;
+}
+
+.logo {
+    font-size: clamp(40px, 8vw, 80px);
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: clamp(18px, 3vw, 28px);
+    opacity: .8;
+    margin-bottom: 45px;
+}
+
+.startBtn {
+    border: none;
+    border-radius: 20px;
+    padding: 20px 55px;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    background: #2563eb;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+.startBtn:active {
+    transform: scale(.96);
+}
+
+.howto {
+    margin-top: 25px;
+    font-size: 17px;
+    opacity: .75;
+}
+
+/* ================= GAME ================= */
+
+#game {
+    position: relative;
+    background: black;
+    align-items: center;
+    justify-content: center;
+}
+
+#camera {
+    display: none;
+}
+
+#canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* UI ด้านบน */
+
+.topUI {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.infoBox {
+    background: rgba(0,0,0,.65);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    padding: 10px 18px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#timer {
+    color: #60a5fa;
+}
+
+/* คำถาม */
+
+.questionBox {
+    position: absolute;
+    z-index: 4;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92%, 850px);
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+#question {
+    font-size: clamp(23px, 4vw, 38px);
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+/* ตัวเลือก */
+
+.answers {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    bottom: 35px;
+    transform: translateX(-50%);
+    width: min(94%, 900px);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.answer {
+    min-height: 90px;
+    border: 3px solid rgba(255,255,255,.7);
+    border-radius: 20px;
+    background: rgba(17,24,39,.88);
+    color: white;
+    padding: 15px;
+    font-size: clamp(17px, 2.5vw, 25px);
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.answer.hovering {
+    border-color: #38bdf8;
+    box-shadow: 0 0 25px rgba(56,189,248,.7);
+}
+
+.answer.selected {
+    background: rgba(37,99,235,.9);
+}
+
+.progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 7px;
+    background: #38bdf8;
+}
+
+/* ================= RESULT ================= */
+
+#result {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    background:
+        radial-gradient(circle at top, #16a34a, transparent 45%),
+        #111827;
+}
+
+.resultTitle {
+    font-size: 55px;
+    font-weight: 900;
+}
+
+#scoreText {
+    font-size: 28px;
+    margin: 20px;
+}
+
+@media (max-width: 700px) {
+    .answers {
+        grid-template-columns: 1fr;
+        bottom: 15px;
+        gap: 8px;
+    }
+
+    .answer {
+        min-height: 65px;
+        padding: 8px;
+    }
+
+    .questionBox {
+        top: 65px;
+        padding: 12px;
+    }
+
+    .topUI {
+        top: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= MENU ================= -->
+
+<section id="menu" class="screen active">
+
+    <div class="logo">☝️ เกมตอบคำถาม</div>
+
+    <div class="subtitle">
+        ใช้นิ้วชี้ควบคุมคำตอบ
+    </div>
+
+    <button class="startBtn" onclick="startGame()">
+        ▶️ เริ่มเกม
+    </button>
+
+    <div class="howto">
+        ☝️ ชี้ไปที่คำตอบ → ค้าง 5 วินาที
+    </div>
+
+</section>
+
+
+<!-- ================= GAME ================= -->
+
+<section id="game" class="screen">
+
+    <video id="camera" autoplay playsinline></video>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="topUI">
+
+        <div class="infoBox">
+            ข้อ <span id="questionNumber">1</span>
+        </div>
+
+        <div class="infoBox">
+            ⏰ <span id="timer">15</span>
+        </div>
+
+        <div class="infoBox">
+            คะแนน <span id="score">0</span>
+        </div>
+
+    </div>
+
+    <div class="questionBox">
+        <div id="question"></div>
+    </div>
+
+    <div class="answers" id="answers"></div>
+
+</section>
+
+
+<!-- ================= RESULT ================= -->
+
+<section id="result" class="screen">
+
+    <div class="resultTitle">🎉 จบเกม!</div>
+
+    <div id="scoreText"></div>
+
+    <button class="startBtn" onclick="startGame()">
+        🔄 เล่นใหม่
+    </button>
+
+</section>
+
+
+<script>
+
+/* =====================================================
+   คำถาม
+   เพิ่มคำถามใหม่ตรงนี้ได้ในอนาคต
+===================================================== */
+
+const questions = [
+
+    {
+        question: "คำถาม 1: คิมและซีเป็นอะไรกัน 🥵👁️👄👁️",
+
+        answers: [
+            "เป็นคนสวยค่ะ*หยิ่ง* 🙄😱🌹🌹",
+            "เป็นคนดีค่ะ 😇👁️👅👁️",
+            "เป็นเกย์ค่ะ 🎀😳🥵",
+            "ผิดทุกข้อค่ะ*ไม่สน* 😒🙄🙄"
+        ],
+
+        correct: 2
+    }
+
+];
+
+
+/* =====================================================
+   ตัวแปรเกม
+===================================================== */
+
+let currentQuestion = 0;
+let score = 0;
+
+let questionTimer = null;
+let timeLeft = 15;
+
+let hoverAnswer = null;
+let hoverStart = 0;
+
+const HOLD_TIME = 5000;
+const QUESTION_TIME = 15000;
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const menu = document.getElementById("menu");
+const game = document.getElementById("game");
+const result = document.getElementById("result");
+
+const video = document.getElementById("camera");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+
+/* =====================================================
+   เริ่มเกม
+===================================================== */
+
+async function startGame() {
+
+    menu.classList.remove("active");
+    result.classList.remove("active");
+    game.classList.add("active");
+
+    currentQuestion = 0;
+    score = 0;
+
+    document.getElementById("score").textContent = score;
+
+    showQuestion();
+
+    try {
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "user",
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false
+        });
+
+        video.srcObject = stream;
+
+        await video.play();
+
+        startCameraAI();
+
+    } catch (error) {
+
+        alert(
+            "ไม่สามารถเปิดกล้องได้ 😢\n\n" +
+            "กรุณากดอนุญาตให้เว็บไซต์ใช้กล้อง"
+        );
+
+    }
+}
+
+
+/* =====================================================
+   แสดงคำถาม
+===================================================== */
+
+function showQuestion() {
+
+    clearInterval(questionTimer);
+
+    if (currentQuestion >= questions.length) {
+        endGame();
+        return;
+    }
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("questionNumber").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("question").textContent =
+        q.question;
+
+    document.getElementById("score").textContent =
+        score;
+
+    const answers = document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    q.answers.forEach((text, index) => {
+
+        const div = document.createElement("div");
+
+        div.className = "answer";
+
+        div.dataset.index = index;
+
+        div.innerHTML = `
+            <span>${text}</span>
+            <div class="progress"></div>
+        `;
+
+        answers.appendChild(div);
+
+    });
+
+    startQuestionTimer();
+}
+
+
+/* =====================================================
+   เวลาของคำถาม
+===================================================== */
+
+function startQuestionTimer() {
+
+    timeLeft = 15;
+
+    document.getElementById("timer").textContent =
+        timeLeft;
+
+    questionTimer = setInterval(() => {
+
+        timeLeft--;
+
+        document.getElementById("timer").textContent =
+            timeLeft;
+
+        if (timeLeft <= 0) {
+
+            clearInterval(questionTimer);
+
+            nextQuestion();
+
+        }
+
+    }, 1000);
+}
+
+
+/* =====================================================
+   เลือกคำตอบ
+===================================================== */
+
+function chooseAnswer(index) {
+
+    clearInterval(questionTimer);
+
+    const q = questions[currentQuestion];
+
+    const boxes =
+        document.querySelectorAll(".answer");
+
+    boxes[index].classList.add("selected");
+
+    if (index === q.correct) {
+
+        score++;
+
+        document.getElementById("score").textContent =
+            score;
+
+        setTimeout(() => {
+            nextQuestion();
+        }, 500);
+
+    } else {
+
+        // ตอบผิด → ข้ามทันที
+
+        setTimeout(() => {
+            nextQuestion();
+        }, 300);
+
+    }
+}
+
+
+/* =====================================================
+   ไปคำถามต่อไป
+===================================================== */
+
+function nextQuestion() {
+
+    hoverAnswer = null;
+    hoverStart = 0;
+
+    currentQuestion++;
+
+    showQuestion();
+}
+
+
+/* =====================================================
+   จบเกม
+===================================================== */
+
+function endGame() {
+
+    game.classList.remove("active");
+    result.classList.add("active");
+
+    document.getElementById("scoreText").textContent =
+        `คุณได้ ${score} / ${questions.length} คะแนน`;
+
+    if (video.srcObject) {
+
+        video.srcObject
+            .getTracks()
+            .forEach(track => track.stop());
+
+    }
+}
+
+
+/* =====================================================
+   MediaPipe Hands
+===================================================== */
+
+let hands;
+let camera;
+
+
+/* =====================================================
+   เริ่ม AI
+===================================================== */
+
+function startCameraAI() {
+
+    hands = new Hands({
+        locateFile: (file) => {
+
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+
+        }
+    });
+
+    hands.setOptions({
+
+        maxNumHands: 1,
+
+        modelComplexity: 1,
+
+        minDetectionConfidence: 0.6,
+
+        minTrackingConfidence: 0.6
+
+    });
+
+
+    hands.onResults(onResults);
+
+
+    camera = new Camera(video, {
+
+        onFrame: async () => {
+
+            await hands.send({
+                image: video
+            });
+
+        },
+
+        width: 1280,
+        height: 720
+
+    });
+
+    camera.start();
+}
+
+
+/* =====================================================
+   วาดกล้อง + มือ
+===================================================== */
+
+function onResults(results) {
+
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    // ภาพกล้องแบบกลับซ้ายขวา
+
+    ctx.save();
+
+    ctx.translate(canvas.width, 0);
+
+    ctx.scale(-1, 1);
+
+    ctx.drawImage(
+        results.image,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.restore();
+
+
+    if (
+        !results.multiHandLandmarks ||
+        results.multiHandLandmarks.length === 0
+    ) {
+
+        resetHover();
+
+        return;
+
+    }
+
+
+    const landmarks =
+        results.multiHandLandmarks[0];
+
+
+    drawHand(landmarks);
+
+
+    // นิ้วชี้ landmark 8
+
+    const indexTip = landmarks[8];
+
+    const x =
+        (1 - indexTip.x) * canvas.width;
+
+    const y =
+        indexTip.y * canvas.height;
+
+
+    // เคอร์เซอร์นิ้วชี้
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        13,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "#38bdf8";
+
+    ctx.fill();
+
+    ctx.strokeStyle = "white";
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+
+
+    checkAnswerHover(x, y);
+}
+
+
+/* =====================================================
+   วาดโครงมือ
+===================================================== */
+
+function drawHand(landmarks) {
+
+    /*
+      นิ้วแต่ละนิ้ว
+
+      นิ้วโป้ง  = เหลือง
+      นิ้วชี้   = ฟ้า
+      นิ้วกลาง  = เหลือง
+      นิ้วนาง   = เหลือง
+      นิ้วก้อย  = เหลือง
+    */
+
+    const fingers = [
+
+        {
+            points: [1, 2, 3, 4],
+            color: "#facc15"
+        },
+
+        {
+            points: [5, 6, 7, 8],
+            color: "#38bdf8"
+        },
+
+        {
+            points: [9, 10, 11, 12],
+            color: "#facc15"
+        },
+
+        {
+            points: [13, 14, 15, 16],
+            color: "#facc15"
+        },
+
+        {
+            points: [17, 18, 19, 20],
+            color: "#facc15"
+        }
+
+    ];
+
+
+    fingers.forEach(finger => {
+
+        ctx.beginPath();
+
+        finger.points.forEach((point, i) => {
+
+            const p = landmarks[point];
+
+            const x =
+                (1 - p.x) * canvas.width;
+
+            const y =
+                p.y * canvas.height;
+
+            if (i === 0) {
+
+                ctx.moveTo(x, y);
+
+            } else {
+
+                ctx.lineTo(x, y);
+
+            }
+
+        });
+
+        ctx.strokeStyle = finger.color;
+
+        ctx.lineWidth = 7;
+
+        ctx.lineCap = "round";
+
+        ctx.lineJoin = "round";
+
+        ctx.stroke();
+
+
+        // จุดข้อต่อ
+
+        finger.points.forEach(point => {
+
+            const p = landmarks[point];
+
+            const x =
+                (1 - p.x) * canvas.width;
+
+            const y =
+                p.y * canvas.height;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle = finger.color;
+
+            ctx.fill();
+
+        });
+
+    });
+
+
+    // ข้อมือ → โคนนิ้ว
+
+    const palmConnections = [
+
+        [0, 5],
+        [5, 9],
+        [9, 13],
+        [13, 17],
+        [0, 17]
+
+    ];
+
+
+    palmConnections.forEach(connection => {
+
+        const a = landmarks[connection[0]];
+        const b = landmarks[connection[1]];
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            (1 - a.x) * canvas.width,
+            a.y * canvas.height
+        );
+
+        ctx.lineTo(
+            (1 - b.x) * canvas.width,
+            b.y * canvas.height
+        );
+
+        ctx.strokeStyle = "rgba(255,255,255,.8)";
+
+        ctx.lineWidth = 4;
+
+        ctx.stroke();
+
+    });
+}
+
+
+/* =====================================================
+   ตรวจว่าปลายนิ้วอยู่บนคำตอบไหม
+===================================================== */
+
+function checkAnswerHover(x, y) {
+
+    const boxes =
+        document.querySelectorAll(".answer");
+
+    let found = null;
+
+    boxes.forEach((box, index) => {
+
+        const rect =
+            box.getBoundingClientRect();
+
+        if (
+            x >= rect.left &&
+            x <= rect.right &&
+            y >= rect.top &&
+            y <= rect.bottom
+        ) {
+
+            found = index;
+
+        }
+
+    });
+
+
+    if (found === null) {
+
+        resetHover();
+
+        return;
+
+    }
+
+
+    if (hoverAnswer !== found) {
+
+        hoverAnswer = found;
+
+        hoverStart = performance.now();
+
+        boxes.forEach(box => {
+            box.classList.remove("hovering");
+        });
+
+    }
+
+
+    boxes[found].classList.add("hovering");
+
+
+    const elapsed =
+        performance.now() - hoverStart;
+
+    const progress =
+        Math.min(elapsed / HOLD_TIME, 1) * 100;
+
+
+    const progressBar =
+        boxes[found].querySelector(".progress");
+
+    progressBar.style.width =
+        progress + "%";
+
+
+    if (elapsed >= HOLD_TIME) {
+
+        chooseAnswer(found);
+
+        hoverAnswer = null;
+
+        hoverStart = 0;
+
+    }
+}
+
+
+/* =====================================================
+   ยกนิ้วออกจากคำตอบ
+===================================================== */
+
+function resetHover() {
+
+    hoverAnswer = null;
+
+    hoverStart = 0;
+
+    document
+        .querySelectorAll(".answer")
+        .forEach(box => {
+
+            box.classList.remove("hovering");
+
+            const bar =
+                box.querySelector(".progress");
+
+            if (bar) {
+                bar.style.width = "0%";
+            }
+
+        });
+}
+
+</script>
+
+</body>
+</html>
