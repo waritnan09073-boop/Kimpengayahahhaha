@@ -2,9 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>เกมตอบคำถามด้วยมือ</title>
 
@@ -12,37 +10,29 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-
     font-family: Arial, "Noto Sans Thai", sans-serif;
-
     background: #111827;
     color: white;
 }
 
-button {
+button,
+select {
     font-family: inherit;
 }
-
-/* =====================================================
-   SCREEN
-===================================================== */
 
 .screen {
     width: 100vw;
     height: 100vh;
-
     display: none;
 }
 
@@ -50,26 +40,16 @@ button {
     display: flex;
 }
 
-
-/* =====================================================
-   MENU
-===================================================== */
+/* ================= MENU ================= */
 
 #menu {
-
     align-items: center;
     justify-content: center;
-
     flex-direction: column;
-
     text-align: center;
 
     background:
-        radial-gradient(
-            circle at top,
-            #2563eb,
-            transparent 50%
-        ),
+        radial-gradient(circle at top, #2563eb, transparent 50%),
         #111827;
 }
 
@@ -79,182 +59,118 @@ button {
 }
 
 .subtitle {
-
     margin: 10px 0 35px;
-
     font-size: clamp(18px, 4vw, 27px);
-
     opacity: .8;
 }
 
 .menuButtons {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 14px;
-
     width: min(80%, 350px);
 }
 
-.menuButton {
-
+.menuButton,
+.startBtn {
     width: 100%;
-
     border: none;
-
     border-radius: 18px;
-
     padding: 17px;
 
-    font-size: 22px;
-
-    font-weight: bold;
-
+    background: #2563eb;
     color: white;
 
-    background: #2563eb;
+    font-size: 22px;
+    font-weight: bold;
 
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,.3);
 }
 
 .menuButton.secondary {
-
     background: rgba(255,255,255,.12);
-
-    border:
-        2px solid
-        rgba(255,255,255,.2);
+    border: 2px solid rgba(255,255,255,.2);
 }
 
-.menuButton:active {
-
+.menuButton:active,
+.startBtn:active,
+.saveButton:active {
     transform: scale(.96);
 }
 
 .howto {
-
     margin-top: 25px;
-
     line-height: 1.7;
-
     opacity: .7;
-
-    font-size: 15px;
 }
 
-
-/* =====================================================
-   SETTINGS
-===================================================== */
+/* ================= SETTINGS ================= */
 
 #settings {
-
     align-items: center;
     justify-content: center;
-
     flex-direction: column;
 
     background:
-        radial-gradient(
-            circle at top,
-            #7c3aed,
-            transparent 50%
-        ),
+        radial-gradient(circle at top, #7c3aed, transparent 50%),
         #111827;
 }
 
 .settingsBox {
-
     width: min(90%, 500px);
-
     padding: 28px;
-
     border-radius: 25px;
 
-    background:
-        rgba(0,0,0,.55);
-
+    background: rgba(0,0,0,.55);
     backdrop-filter: blur(15px);
 }
 
 .settingsTitle {
-
     font-size: 32px;
-
     font-weight: 900;
-
     text-align: center;
-
     margin-bottom: 25px;
 }
 
 .settingRow {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 15px;
 
     padding: 17px 0;
 
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.12);
+    border-bottom: 1px solid rgba(255,255,255,.12);
 }
 
 .settingName {
-
     font-size: 19px;
-
     font-weight: bold;
 }
 
-
-/* Toggle */
-
 .switch {
-
     position: relative;
-
     width: 62px;
     height: 34px;
-
     flex-shrink: 0;
 }
 
 .switch input {
-
     opacity: 0;
-
     width: 0;
     height: 0;
 }
 
 .slider {
-
     position: absolute;
-
     inset: 0;
-
-    cursor: pointer;
-
     border-radius: 40px;
-
     background: #4b5563;
-
     transition: .2s;
 }
 
 .slider:before {
-
     content: "";
-
     position: absolute;
 
     width: 26px;
@@ -264,152 +180,100 @@ button {
     top: 4px;
 
     border-radius: 50%;
-
     background: white;
 
     transition: .2s;
 }
 
 .switch input:checked + .slider {
-
     background: #22c55e;
 }
 
 .switch input:checked + .slider:before {
-
-    transform:
-        translateX(28px);
+    transform: translateX(28px);
 }
 
-
-/* Select */
-
 .timeSelect {
-
     padding: 10px 15px;
-
     border: none;
-
     border-radius: 12px;
 
     font-size: 17px;
-
     font-weight: bold;
 }
 
 .saveButton {
-
     width: 100%;
-
     margin-top: 25px;
 
     border: none;
-
     border-radius: 16px;
 
     padding: 15px;
 
     background: #22c55e;
-
     color: white;
 
     font-size: 20px;
-
     font-weight: bold;
 }
 
-
-/* =====================================================
-   HOW TO
-===================================================== */
+/* ================= INSTRUCTIONS ================= */
 
 #instructions {
-
     align-items: center;
     justify-content: center;
-
     flex-direction: column;
-
     text-align: center;
 
     background:
-        radial-gradient(
-            circle at top,
-            #0891b2,
-            transparent 50%
-        ),
+        radial-gradient(circle at top, #0891b2, transparent 50%),
         #111827;
 }
 
 .instructionsBox {
-
     width: min(90%, 650px);
-
     padding: 25px;
-
     border-radius: 25px;
 
-    background:
-        rgba(0,0,0,.55);
-
+    background: rgba(0,0,0,.55);
     backdrop-filter: blur(12px);
 }
 
 .instructionsBox h2 {
-
     font-size: 32px;
-
     margin-top: 0;
 }
 
 .instructionsBox p {
-
     font-size: 18px;
-
     line-height: 1.8;
-
     text-align: left;
 }
 
-
-/* =====================================================
-   GAME
-===================================================== */
+/* ================= GAME ================= */
 
 #game {
-
     position: relative;
-
-    background: black;
-
+    background: #000;
     overflow: hidden;
 }
 
 .cameraBox {
-
     position: absolute;
-
     inset: 0;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    background: black;
-
+    background: #000;
     overflow: hidden;
 }
 
-
-/* Camera */
-
 #camera {
-
     width: 100%;
     height: 100%;
-
     object-fit: cover;
 
     transform: scaleX(-1);
@@ -417,13 +281,8 @@ button {
     display: block;
 }
 
-
-/* Canvas */
-
 #canvas {
-
     position: absolute;
-
     inset: 0;
 
     width: 100%;
@@ -432,68 +291,50 @@ button {
     pointer-events: none;
 }
 
-
-/* =====================================================
-   TOP UI
-===================================================== */
+/* ================= TOP UI ================= */
 
 .topUI {
-
     position: absolute;
 
     top: 15px;
-
     left: 15px;
-
     right: 15px;
 
     z-index: 20;
 
     display: flex;
-
     justify-content: space-between;
-
     gap: 10px;
 }
 
 .infoBox {
-
     padding: 10px 18px;
 
     border-radius: 15px;
 
-    background:
-        rgba(0,0,0,.72);
+    background: rgba(0,0,0,.72);
 
     backdrop-filter: blur(8px);
 
     font-size: 18px;
-
     font-weight: bold;
 }
 
 #timer {
-
     color: #60a5fa;
 }
 
-
-/* =====================================================
-   QUESTION
-===================================================== */
+/* ================= QUESTION ================= */
 
 .questionBox {
-
     position: absolute;
 
     z-index: 20;
 
     top: 80px;
-
     left: 50%;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     width: min(88%, 850px);
 
@@ -501,8 +342,7 @@ button {
 
     border-radius: 22px;
 
-    background:
-        rgba(0,0,0,.75);
+    background: rgba(0,0,0,.75);
 
     backdrop-filter: blur(10px);
 
@@ -510,24 +350,15 @@ button {
 }
 
 #question {
-
-    font-size:
-        clamp(21px, 3.5vw, 36px);
-
+    font-size: clamp(21px, 3.5vw, 36px);
     font-weight: bold;
-
     line-height: 1.4;
 }
 
-
-/* =====================================================
-   ANSWERS
-===================================================== */
+/* ================= ANSWERS ================= */
 
 .answers {
-
     position: absolute;
-
     inset: 0;
 
     z-index: 15;
@@ -536,35 +367,25 @@ button {
 }
 
 .answer {
-
     position: absolute;
 
     width: min(32vw, 360px);
-
     min-height: 105px;
 
-    border:
-        3px solid
-        rgba(255,255,255,.85);
-
+    border: 3px solid rgba(255,255,255,.85);
     border-radius: 22px;
 
-    background:
-        rgba(17,24,39,.9);
+    background: rgba(17,24,39,.9);
 
     color: white;
 
     padding: 18px;
 
-    font-size:
-        clamp(16px, 2.3vw, 24px);
-
+    font-size: clamp(16px, 2.3vw, 24px);
     font-weight: bold;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     text-align: center;
@@ -577,94 +398,61 @@ button {
         box-shadow .15s ease;
 }
 
+/* ================= HITBOX เดิม ================= */
 
-/* 1 ซ้ายบน */
-
+/* 1 = ซ้ายบน */
 .answer:nth-child(1) {
-
     left: 4%;
-
     top: 43%;
 }
 
-
-/* 2 ซ้ายล่าง */
-
+/* 2 = ซ้ายล่าง */
 .answer:nth-child(2) {
-
     left: 4%;
-
     bottom: 6%;
 }
 
-
-/* 3 ขวาบน */
-
+/* 3 = ขวาบน */
 .answer:nth-child(3) {
-
     right: 4%;
-
     top: 43%;
 }
 
-
-/* 4 ขวาล่าง */
-
+/* 4 = ขวาล่าง */
 .answer:nth-child(4) {
-
     right: 4%;
-
     bottom: 6%;
 }
-
 
 .answer.hovering {
-
-    border-color:
-        #38bdf8;
+    border-color: #38bdf8;
 
     box-shadow:
-        0 0 30px
-        rgba(56,189,248,.8);
+        0 0 30px rgba(56,189,248,.8);
 
-    transform:
-        scale(1.03);
+    transform: scale(1.03);
 }
 
 .answer.selected {
-
-    background:
-        rgba(37,99,235,.9);
+    background: rgba(37,99,235,.9);
 }
 
-
-/* Progress */
-
 .progress {
-
     position: absolute;
 
     left: 0;
-
     bottom: 0;
 
     width: 0%;
-
     height: 8px;
 
-    background:
-        #38bdf8;
+    background: #38bdf8;
 }
 
-
-/* =====================================================
-   RESULT
-===================================================== */
+/* ================= RESULT ================= */
 
 #result {
-
     align-items: center;
-
     justify-content: center;
 
     flex-direction: column;
@@ -672,113 +460,83 @@ button {
     text-align: center;
 
     background:
-        radial-gradient(
-            circle at top,
-            #16a34a,
-            transparent 50%
-        ),
+        radial-gradient(circle at top, #16a34a, transparent 50%),
         #111827;
 }
 
 .resultTitle {
-
-    font-size:
-        clamp(40px, 8vw, 65px);
-
+    font-size: clamp(40px, 8vw, 65px);
     font-weight: 900;
 }
 
 #scoreText {
-
     font-size: 28px;
-
     margin: 20px;
 }
 
+.resultButtons {
+    width: min(80%, 350px);
+}
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================= MOBILE ================= */
 
 @media (max-width: 700px) {
 
     .infoBox {
-
         padding: 8px 11px;
-
         font-size: 14px;
     }
 
     .topUI {
-
         top: 8px;
-
         left: 8px;
-
         right: 8px;
     }
 
     .questionBox {
-
         top: 65px;
-
         width: 86%;
-
         padding: 12px 15px;
     }
 
     #question {
-
         font-size: 20px;
     }
 
     .answer {
-
         width: 42vw;
-
         min-height: 90px;
 
         padding: 10px;
 
         font-size: 16px;
-
         border-radius: 18px;
     }
 
     .answer:nth-child(1) {
-
         left: 3%;
-
         top: 43%;
     }
 
     .answer:nth-child(2) {
-
         left: 3%;
-
         bottom: 5%;
     }
 
     .answer:nth-child(3) {
-
         right: 3%;
-
         top: 43%;
     }
 
     .answer:nth-child(4) {
-
         right: 3%;
-
         bottom: 5%;
     }
 }
-
 </style>
 </head>
 
 <body>
-
 
 <!-- =====================================================
      MENU
@@ -786,9 +544,7 @@ button {
 
 <section id="menu" class="screen active">
 
-    <div class="logo">
-        ☝️
-    </div>
+    <div class="logo">☝️</div>
 
     <div class="logo">
         เกมตอบคำถาม
@@ -798,43 +554,31 @@ button {
         ใช้นิ้วชี้ควบคุมคำตอบ
     </div>
 
-
     <div class="menuButtons">
 
         <button
             class="menuButton"
             onclick="startGame()">
-
             ▶️ เริ่มเกม
-
         </button>
-
 
         <button
             class="menuButton secondary"
             onclick="openSettings()">
-
             ⚙️ ตั้งค่า
-
         </button>
-
 
         <button
             class="menuButton secondary"
             onclick="openInstructions()">
-
             ❓ วิธีเล่น
-
         </button>
 
     </div>
 
-
     <div class="howto">
-
         ☝️ ชี้คำตอบ<br>
         ค้าง 5 วินาทีเพื่อเลือก
-
     </div>
 
 </section>
@@ -844,9 +588,7 @@ button {
      SETTINGS
 ===================================================== -->
 
-<section
-    id="settings"
-    class="screen">
+<section id="settings" class="screen">
 
     <div class="settingsBox">
 
@@ -854,15 +596,11 @@ button {
             ⚙️ ตั้งค่า
         </div>
 
-
-        <!-- เวลา -->
-
         <div class="settingRow">
 
             <div class="settingName">
                 มีเวลาจำกัด
             </div>
-
 
             <label class="switch">
 
@@ -878,9 +616,6 @@ button {
 
         </div>
 
-
-        <!-- เวลาต่อข้อ -->
-
         <div
             class="settingRow"
             id="timeRow">
@@ -888,7 +623,6 @@ button {
             <div class="settingName">
                 เวลาต่อข้อ
             </div>
-
 
             <select
                 id="timeSelect"
@@ -898,12 +632,8 @@ button {
                     10 วินาที
                 </option>
 
-                <option
-                    value="15"
-                    selected>
-
+                <option value="15" selected>
                     15 วินาที
-
                 </option>
 
                 <option value="20">
@@ -922,7 +652,6 @@ button {
 
         </div>
 
-
         <button
             class="saveButton"
             onclick="saveSettings()">
@@ -940,9 +669,7 @@ button {
      INSTRUCTIONS
 ===================================================== -->
 
-<section
-    id="instructions"
-    class="screen">
+<section id="instructions" class="screen">
 
     <div class="instructionsBox">
 
@@ -951,42 +678,28 @@ button {
         </h2>
 
         <p>
-
             ☝️ ใช้นิ้วชี้ควบคุมจุดสีฟ้า
-
             <br><br>
 
             🔵 นิ้วชี้ = สีฟ้า
-
             <br>
 
             🟡 นิ้วโป้ง / กลาง / นาง / ก้อย
             = สีเหลือง
-
             <br><br>
 
             🎯 เลื่อนนิ้วชี้ไปบนคำตอบ
-
             <br>
 
             ⏳ ค้างไว้ 5 วินาที
-
             <br>
 
-            ✅ คำตอบจะถูกเลือก
-
+            ❌ ถ้าตอบผิด จะข้ามไปข้อถัดไป
             <br>
-
-            ❌ ถ้าตอบผิด
-            จะข้ามไปข้อถัดไปทันที
-
-            <br><br>
 
             ⏰ ถ้าเปิดเวลาจำกัด
             เมื่อหมดเวลาจะข้ามข้อ
-
         </p>
-
 
         <button
             class="saveButton"
@@ -1020,49 +733,36 @@ button {
 
     </div>
 
-
     <div class="topUI">
 
         <div class="infoBox">
-
             ข้อ
-            <span id="questionNumber">
-                1
-            </span>
-
+            <span id="questionNumber">1</span>
         </div>
-
 
         <div
             class="infoBox"
             id="timerBox">
 
             ⏰
-            <span id="timer">
-                15
-            </span>
+            <span id="timer">15</span>
 
         </div>
-
 
         <div class="infoBox">
 
             คะแนน
-            <span id="score">
-                0
-            </span>
+            <span id="score">0</span>
 
         </div>
 
     </div>
-
 
     <div class="questionBox">
 
         <div id="question"></div>
 
     </div>
-
 
     <div
         class="answers"
@@ -1076,9 +776,7 @@ button {
      RESULT
 ===================================================== -->
 
-<section
-    id="result"
-    class="screen">
+<section id="result" class="screen">
 
     <div class="resultTitle">
         🎉 จบเกม!
@@ -1086,24 +784,26 @@ button {
 
     <div id="scoreText"></div>
 
+    <div class="resultButtons">
 
-    <button
-        class="startBtn"
-        onclick="startGame()">
+        <button
+            class="startBtn"
+            onclick="restartGame()">
 
-        🔄 เล่นใหม่
+            🔄 เล่นใหม่
 
-    </button>
+        </button>
 
+        <button
+            class="menuButton secondary"
+            style="margin-top:15px;"
+            onclick="backToMenu()">
 
-    <button
-        class="menuButton secondary"
-        style="width:min(80%,350px); margin-top:15px;"
-        onclick="showScreen('menu')">
+            🏠 กลับเมนู
 
-        🏠 กลับเมนู
+        </button>
 
-    </button>
+    </div>
 
 </section>
 
@@ -1117,7 +817,6 @@ button {
 const questions = [
 
     {
-
         question:
             "คำถาม 1: คิมและซีเป็นอะไรกัน 🥵👁️👄👁️",
 
@@ -1133,12 +832,8 @@ const questions = [
 
         ],
 
-        /*
-           เฉลยข้อ 3
-        */
-
+        /* เฉลยข้อ 3 */
         correct: 2
-
     }
 
 ];
@@ -1151,11 +846,6 @@ const questions = [
 let timeLimitEnabled = true;
 
 let questionTime = 15;
-
-
-/* =====================================================
-   GAME SETTINGS
-===================================================== */
 
 const HOLD_TIME = 5000;
 
@@ -1177,33 +867,23 @@ let hoverAnswer = null;
 let hoverStart = 0;
 
 
+/* ป้องกันการเปิด Camera ซ้อน */
+
+let cameraRunning = false;
+
+
 /* =====================================================
-   HAND SMOOTHING
+   SMOOTHING
 ===================================================== */
 
 const smoothPoints = [];
 
-const SMOOTHING = 0.65;
+const SMOOTHING = 0.7;
 
 
 /* =====================================================
    DOM
 ===================================================== */
-
-const menu =
-    document.getElementById("menu");
-
-const settings =
-    document.getElementById("settings");
-
-const instructions =
-    document.getElementById("instructions");
-
-const game =
-    document.getElementById("game");
-
-const result =
-    document.getElementById("result");
 
 const video =
     document.getElementById("camera");
@@ -1216,10 +896,10 @@ const ctx =
 
 
 /* =====================================================
-   SHOW SCREEN
+   SCREEN
 ===================================================== */
 
-function showScreen(screenName) {
+function showScreen(name) {
 
     document
         .querySelectorAll(".screen")
@@ -1231,41 +911,31 @@ function showScreen(screenName) {
 
         });
 
-
     document
-        .getElementById(screenName)
+        .getElementById(name)
         .classList.add("active");
 }
 
 
 /* =====================================================
-   SETTINGS OPEN
+   SETTINGS
 ===================================================== */
 
 function openSettings() {
 
     document.getElementById(
         "timeLimitToggle"
-    ).checked =
-        timeLimitEnabled;
-
+    ).checked = timeLimitEnabled;
 
     document.getElementById(
         "timeSelect"
-    ).value =
-        questionTime;
-
+    ).value = questionTime;
 
     updateTimeSetting();
-
 
     showScreen("settings");
 }
 
-
-/* =====================================================
-   UPDATE SETTING UI
-===================================================== */
 
 function updateTimeSetting() {
 
@@ -1274,27 +944,23 @@ function updateTimeSetting() {
             "timeLimitToggle"
         ).checked;
 
-
     const row =
         document.getElementById(
             "timeRow"
         );
 
+    const select =
+        document.getElementById(
+            "timeSelect"
+        );
 
     row.style.opacity =
         enabled ? "1" : ".4";
 
-
-    document.getElementById(
-        "timeSelect"
-    ).disabled =
+    select.disabled =
         !enabled;
 }
 
-
-/* =====================================================
-   SAVE SETTINGS
-===================================================== */
 
 function saveSettings() {
 
@@ -1303,7 +969,6 @@ function saveSettings() {
             "timeLimitToggle"
         ).checked;
 
-
     questionTime =
         Number(
             document.getElementById(
@@ -1311,14 +976,9 @@ function saveSettings() {
             ).value
         );
 
-
     showScreen("menu");
 }
 
-
-/* =====================================================
-   INSTRUCTIONS
-===================================================== */
 
 function openInstructions() {
 
@@ -1332,28 +992,43 @@ function openInstructions() {
 
 async function startGame() {
 
-    showScreen("game");
-
+    clearInterval(questionTimer);
 
     currentQuestion = 0;
 
     score = 0;
 
-    document.getElementById(
-        "score"
-    ).textContent =
-        score;
+    hoverAnswer = null;
 
-
-    /*
-       รีเซ็ต smoothing
-    */
+    hoverStart = 0;
 
     smoothPoints.length = 0;
 
+    document.getElementById(
+        "score"
+    ).textContent = "0";
+
+    showScreen("game");
 
     showQuestion();
 
+    await startCamera();
+
+}
+
+
+/* =====================================================
+   START CAMERA
+===================================================== */
+
+async function startCamera() {
+
+    /*
+       ถ้ามีกล้องเก่าอยู่
+       ปิดก่อน
+    */
+
+    stopCamera();
 
     try {
 
@@ -1387,26 +1062,44 @@ async function startGame() {
         video.srcObject =
             stream;
 
-
         await video.play();
 
+        cameraRunning = true;
 
         startCameraAI();
-
 
     } catch (error) {
 
         console.error(error);
 
+        cameraRunning = false;
 
         alert(
             "เปิดกล้องไม่ได้ 😢\n\n" +
-            "กรุณาอนุญาตให้เว็บไซต์ใช้กล้อง " +
-            "แล้วลองใหม่อีกครั้ง"
+            "กรุณาอนุญาตให้เว็บไซต์ใช้กล้อง"
         );
-
     }
+}
 
+
+/* =====================================================
+   STOP CAMERA
+===================================================== */
+
+function stopCamera() {
+
+    cameraRunning = false;
+
+    if (video.srcObject) {
+
+        video.srcObject
+            .getTracks()
+            .forEach(track => {
+                track.stop();
+            });
+
+        video.srcObject = null;
+    }
 }
 
 
@@ -1416,10 +1109,7 @@ async function startGame() {
 
 function showQuestion() {
 
-    clearInterval(
-        questionTimer
-    );
-
+    clearInterval(questionTimer);
 
     if (
         currentQuestion >=
@@ -1431,39 +1121,30 @@ function showQuestion() {
         return;
     }
 
-
     const q =
-        questions[
-            currentQuestion
-        ];
-
+        questions[currentQuestion];
 
     document.getElementById(
         "questionNumber"
     ).textContent =
         currentQuestion + 1;
 
-
     document.getElementById(
         "question"
     ).textContent =
         q.question;
-
 
     document.getElementById(
         "score"
     ).textContent =
         score;
 
-
     const answers =
         document.getElementById(
             "answers"
         );
 
-
     answers.innerHTML = "";
-
 
     q.answers.forEach(
         (text, index) => {
@@ -1473,68 +1154,40 @@ function showQuestion() {
                     "div"
                 );
 
-
             div.className =
                 "answer";
-
 
             div.dataset.index =
                 index;
 
-
             div.innerHTML = `
-
-                <span>
-                    ${text}
-                </span>
-
-                <div class="progress">
-                </div>
-
+                <span>${text}</span>
+                <div class="progress"></div>
             `;
 
-
-            answers.appendChild(
-                div
-            );
+            answers.appendChild(div);
 
         }
     );
 
-
     resetHover();
 
-
-    /*
-       เริ่มจับเวลา
-       เฉพาะตอนเปิดใช้งาน
-    */
-
     startQuestionTimer();
-
 }
 
 
 /* =====================================================
-   QUESTION TIMER
+   TIMER
 ===================================================== */
 
 function startQuestionTimer() {
 
-    clearInterval(
-        questionTimer
-    );
-
+    clearInterval(questionTimer);
 
     const timerBox =
         document.getElementById(
             "timerBox"
         );
-
-
-    /*
-       ปิดเวลา
-    */
 
     if (!timeLimitEnabled) {
 
@@ -1544,58 +1197,38 @@ function startQuestionTimer() {
         return;
     }
 
-
-    /*
-       เปิดเวลา
-    */
-
     timerBox.style.display =
         "block";
 
-
     timeLeft =
         questionTime;
-
 
     document.getElementById(
         "timer"
     ).textContent =
         timeLeft;
 
-
     questionTimer =
-        setInterval(
-            () => {
+        setInterval(() => {
 
-                timeLeft--;
+            timeLeft--;
 
+            document.getElementById(
+                "timer"
+            ).textContent =
+                timeLeft;
 
-                document.getElementById(
-                    "timer"
-                ).textContent =
-                    timeLeft;
+            if (timeLeft <= 0) {
 
+                clearInterval(
+                    questionTimer
+                );
 
-                /*
-                   หมดเวลา
-                */
+                nextQuestion();
 
-                if (
-                    timeLeft <= 0
-                ) {
+            }
 
-                    clearInterval(
-                        questionTimer
-                    );
-
-
-                    nextQuestion();
-
-                }
-
-            },
-            1000
-        );
+        }, 1000);
 }
 
 
@@ -1605,22 +1238,15 @@ function startQuestionTimer() {
 
 function chooseAnswer(index) {
 
-    clearInterval(
-        questionTimer
-    );
-
+    clearInterval(questionTimer);
 
     const q =
-        questions[
-            currentQuestion
-        ];
-
+        questions[currentQuestion];
 
     const boxes =
         document.querySelectorAll(
             ".answer"
         );
-
 
     if (boxes[index]) {
 
@@ -1628,7 +1254,6 @@ function chooseAnswer(index) {
             .classList
             .add("selected");
     }
-
 
     /*
        ถูก
@@ -1640,24 +1265,18 @@ function chooseAnswer(index) {
 
         score++;
 
-
         document.getElementById(
             "score"
         ).textContent =
             score;
 
+        setTimeout(() => {
 
-        setTimeout(
-            () => {
+            nextQuestion();
 
-                nextQuestion();
-
-            },
-            500
-        );
+        }, 500);
 
     }
-
 
     /*
        ผิด
@@ -1665,17 +1284,13 @@ function chooseAnswer(index) {
 
     else {
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                nextQuestion();
+            nextQuestion();
 
-            },
-            300
-        );
+        }, 300);
 
     }
-
 }
 
 
@@ -1684,6 +1299,8 @@ function chooseAnswer(index) {
 ===================================================== */
 
 function nextQuestion() {
+
+    clearInterval(questionTimer);
 
     hoverAnswer = null;
 
@@ -1701,48 +1318,94 @@ function nextQuestion() {
 
 function endGame() {
 
-    clearInterval(
-        questionTimer
-    );
+    clearInterval(questionTimer);
 
+    stopCamera();
 
-    game.classList.remove(
-        "active"
-    );
-
-
-    result.classList.add(
-        "active"
-    );
-
+    showScreen("result");
 
     document.getElementById(
         "scoreText"
     ).textContent =
-
         `คุณได้ ${score} / ${questions.length} คะแนน`;
+}
 
+
+/* =====================================================
+   RESTART GAME
+===================================================== */
+
+async function restartGame() {
 
     /*
-       ปิดกล้อง
+       หยุดของเดิมก่อน
     */
 
-    if (
-        video.srcObject
-    ) {
+    clearInterval(questionTimer);
 
-        video.srcObject
-            .getTracks()
-            .forEach(
-                track =>
-                    track.stop()
-            );
+    stopCamera();
+
+    /*
+       รีเซ็ตทุกอย่าง
+    */
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    timeLeft = questionTime;
+
+    hoverAnswer = null;
+
+    hoverStart = 0;
+
+    smoothPoints.length = 0;
+
+    document.getElementById(
+        "score"
+    ).textContent = "0";
+
+    /*
+       ไปหน้าเกม
+    */
+
+    showScreen("game");
+
+    /*
+       แสดงข้อแรก
+    */
+
+    showQuestion();
+
+    /*
+       เปิดกล้องใหม่
+    */
+
+    await startCamera();
+}
 
 
-        video.srcObject =
-            null;
-    }
+/* =====================================================
+   BACK TO MENU
+===================================================== */
 
+function backToMenu() {
+
+    clearInterval(questionTimer);
+
+    stopCamera();
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    hoverAnswer = null;
+
+    hoverStart = 0;
+
+    smoothPoints.length = 0;
+
+    showScreen("menu");
 }
 
 
@@ -1761,19 +1424,38 @@ let cameraAI = null;
 
 function startCameraAI() {
 
+    /*
+       ถ้ามี AI เดิมอยู่
+       ไม่สร้างเพิ่ม
+    */
+
+    if (cameraAI) {
+
+        try {
+            cameraAI.stop();
+        } catch(e) {}
+    }
+
+    if (hands) {
+
+        try {
+            hands.close();
+        } catch(e) {}
+    }
+
+
     hands =
         new Hands({
 
-            locateFile:
-                (file) => {
+            locateFile: (file) => {
 
-                    return (
-                        "https://cdn.jsdelivr.net/npm/" +
-                        "@mediapipe/hands/" +
-                        file
-                    );
+                return (
+                    "https://cdn.jsdelivr.net/npm/" +
+                    "@mediapipe/hands/" +
+                    file
+                );
 
-                }
+            }
 
         });
 
@@ -1784,11 +1466,9 @@ function startCameraAI() {
 
         modelComplexity: 1,
 
-        minDetectionConfidence:
-            0.7,
+        minDetectionConfidence: 0.7,
 
-        minTrackingConfidence:
-            0.7
+        minTrackingConfidence: 0.7
 
     });
 
@@ -1807,14 +1487,12 @@ function startCameraAI() {
                     async () => {
 
                         if (
+                            cameraRunning &&
                             video.readyState >= 2
                         ) {
 
                             await hands.send({
-
-                                image:
-                                    video
-
+                                image: video
                             });
 
                         }
@@ -1830,7 +1508,6 @@ function startCameraAI() {
 
 
     cameraAI.start();
-
 }
 
 
@@ -1838,9 +1515,7 @@ function startCameraAI() {
    RESULTS
 ===================================================== */
 
-function onResults(
-    results
-) {
+function onResults(results) {
 
     canvas.width =
         canvas.clientWidth;
@@ -1848,18 +1523,12 @@ function onResults(
     canvas.height =
         canvas.clientHeight;
 
-
     ctx.clearRect(
         0,
         0,
         canvas.width,
         canvas.height
     );
-
-
-    /*
-       ไม่มีมือ
-    */
 
     if (
         !results.multiHandLandmarks ||
@@ -1871,39 +1540,24 @@ function onResults(
         return;
     }
 
-
     const raw =
         results.multiHandLandmarks[0];
 
-
-    /*
-       ทำให้มือเสถียร
-    */
-
     const landmarks =
-        smoothLandmarks(
-            raw
-        );
+        smoothLandmarks(raw);
 
-
-    drawHand(
-        landmarks
-    );
-
+    drawHand(landmarks);
 
     /*
-       นิ้วชี้
-       landmark 8
+       นิ้วชี้ = จุด 8
     */
 
     const indexTip =
         landmarks[8];
 
-
     const x =
         (1 - indexTip.x) *
         canvas.width;
-
 
     const y =
         indexTip.y *
@@ -1911,7 +1565,7 @@ function onResults(
 
 
     /*
-       จุดนิ้วชี้
+       จุดปลายนิ้วชี้
        สีฟ้า
     */
 
@@ -1925,98 +1579,71 @@ function onResults(
         Math.PI * 2
     );
 
-
     ctx.fillStyle =
         "#38bdf8";
 
-
     ctx.fill();
-
 
     ctx.strokeStyle =
         "white";
 
-
-    ctx.lineWidth =
-        3;
-
+    ctx.lineWidth = 3;
 
     ctx.stroke();
 
 
-    checkAnswerHover(
-        x,
-        y
-    );
-
+    checkAnswerHover(x, y);
 }
 
 
 /* =====================================================
-   SMOOTH LANDMARKS
+   SMOOTH
 ===================================================== */
 
-function smoothLandmarks(
-    points
-) {
+function smoothLandmarks(points) {
 
     if (
         smoothPoints.length === 0
     ) {
 
-        points.forEach(
-            p => {
+        points.forEach(p => {
 
-                smoothPoints.push({
+            smoothPoints.push({
 
-                    x: p.x,
+                x: p.x,
 
-                    y: p.y,
+                y: p.y,
 
-                    z: p.z
+                z: p.z
 
-                });
+            });
 
-            }
-        );
-
+        });
 
         return smoothPoints;
     }
-
-
-    const smoothing =
-        0.7;
 
 
     points.forEach(
         (p, i) => {
 
             smoothPoints[i].x =
-
                 smoothPoints[i].x *
-                smoothing +
-
+                SMOOTHING +
                 p.x *
-                (1 - smoothing);
-
+                (1 - SMOOTHING);
 
             smoothPoints[i].y =
-
                 smoothPoints[i].y *
-                smoothing +
-
+                SMOOTHING +
                 p.y *
-                (1 - smoothing);
-
+                (1 - SMOOTHING);
 
             smoothPoints[i].z =
-
                 smoothPoints[i].z *
-                smoothing +
-
+                SMOOTHING +
                 p.z *
-                (1 - smoothing);
+                (1 - SMOOTHING);
 
         }
     );
@@ -2030,74 +1657,33 @@ function smoothLandmarks(
    DRAW HAND
 ===================================================== */
 
-function drawHand(
-    landmarks
-) {
+function drawHand(landmarks) {
 
     const fingers = [
 
-        /*
-           นิ้วโป้ง
-        */
-
         {
-            points:
-                [1,2,3,4],
-
-            color:
-                "#facc15"
+            points: [1,2,3,4],
+            color: "#facc15"
         },
 
-
-        /*
-           นิ้วชี้
-        */
-
         {
-            points:
-                [5,6,7,8],
-
-            color:
-                "#38bdf8"
+            points: [5,6,7,8],
+            color: "#38bdf8"
         },
 
-
-        /*
-           นิ้วกลาง
-        */
-
         {
-            points:
-                [9,10,11,12],
-
-            color:
-                "#facc15"
+            points: [9,10,11,12],
+            color: "#facc15"
         },
 
-
-        /*
-           นิ้วนาง
-        */
-
         {
-            points:
-                [13,14,15,16],
-
-            color:
-                "#facc15"
+            points: [13,14,15,16],
+            color: "#facc15"
         },
 
-
-        /*
-           นิ้วก้อย
-        */
-
         {
-            points:
-                [17,18,19,20],
-
-            color:
-                "#facc15"
+            points: [17,18,19,20],
+            color: "#facc15"
         }
 
     ];
@@ -2108,29 +1694,21 @@ function drawHand(
 
             ctx.beginPath();
 
-
             finger.points.forEach(
                 (point, i) => {
 
                     const p =
-                        landmarks[
-                            point
-                        ];
-
+                        landmarks[point];
 
                     const x =
                         (1 - p.x) *
                         canvas.width;
 
-
                     const y =
                         p.y *
                         canvas.height;
 
-
-                    if (
-                        i === 0
-                    ) {
+                    if (i === 0) {
 
                         ctx.moveTo(
                             x,
@@ -2153,47 +1731,32 @@ function drawHand(
             ctx.strokeStyle =
                 finger.color;
 
-
-            ctx.lineWidth =
-                7;
-
+            ctx.lineWidth = 7;
 
             ctx.lineCap =
                 "round";
 
-
             ctx.lineJoin =
                 "round";
 
-
             ctx.stroke();
 
-
-            /*
-               จุดข้อต่อ
-            */
 
             finger.points.forEach(
                 point => {
 
                     const p =
-                        landmarks[
-                            point
-                        ];
-
+                        landmarks[point];
 
                     const x =
                         (1 - p.x) *
                         canvas.width;
 
-
                     const y =
                         p.y *
                         canvas.height;
 
-
                     ctx.beginPath();
-
 
                     ctx.arc(
                         x,
@@ -2203,10 +1766,8 @@ function drawHand(
                         Math.PI * 2
                     );
 
-
                     ctx.fillStyle =
                         finger.color;
-
 
                     ctx.fill();
 
@@ -2218,19 +1779,15 @@ function drawHand(
 
 
     /*
-       เส้นฝ่ามือ
+       ฝ่ามือ
     */
 
     const palmConnections = [
 
         [0,5],
-
         [5,9],
-
         [9,13],
-
         [13,17],
-
         [0,17]
 
     ];
@@ -2244,71 +1801,54 @@ function drawHand(
                     connection[0]
                 ];
 
-
             const b =
                 landmarks[
                     connection[1]
                 ];
 
-
             ctx.beginPath();
 
-
             ctx.moveTo(
-
                 (1 - a.x) *
                 canvas.width,
 
                 a.y *
                 canvas.height
-
             );
 
-
             ctx.lineTo(
-
                 (1 - b.x) *
                 canvas.width,
 
                 b.y *
                 canvas.height
-
             );
-
 
             ctx.strokeStyle =
                 "rgba(255,255,255,.85)";
 
-
-            ctx.lineWidth =
-                4;
-
+            ctx.lineWidth = 4;
 
             ctx.stroke();
 
         }
     );
-
 }
 
 
 /* =====================================================
-   CHECK ANSWER HOVER
+   HITBOX
+   ไม่เปลี่ยนตำแหน่ง Hitbox
 ===================================================== */
 
-function checkAnswerHover(
-    x,
-    y
-) {
+function checkAnswerHover(x, y) {
 
     const boxes =
         document.querySelectorAll(
             ".answer"
         );
 
-
-    let found =
-        null;
+    let found = null;
 
 
     boxes.forEach(
@@ -2317,31 +1857,20 @@ function checkAnswerHover(
             const rect =
                 box.getBoundingClientRect();
 
-
             if (
-
                 x >= rect.left &&
-
                 x <= rect.right &&
-
                 y >= rect.top &&
-
                 y <= rect.bottom
-
             ) {
 
-                found =
-                    index;
+                found = index;
 
             }
 
         }
     );
 
-
-    /*
-       ไม่อยู่บนคำตอบ
-    */
 
     if (
         found === null
@@ -2353,10 +1882,6 @@ function checkAnswerHover(
     }
 
 
-    /*
-       เปลี่ยนช่อง
-    */
-
     if (
         hoverAnswer !== found
     ) {
@@ -2364,18 +1889,15 @@ function checkAnswerHover(
         hoverAnswer =
             found;
 
-
         hoverStart =
             performance.now();
-
 
         boxes.forEach(
             box => {
 
-                box.classList
-                    .remove(
-                        "hovering"
-                    );
+                box.classList.remove(
+                    "hovering"
+                );
 
             }
         );
@@ -2387,10 +1909,6 @@ function checkAnswerHover(
         .classList
         .add("hovering");
 
-
-    /*
-       ความคืบหน้า 5 วินาที
-    */
 
     const elapsed =
         performance.now() -
@@ -2421,25 +1939,15 @@ function checkAnswerHover(
     }
 
 
-    /*
-       ครบ 5 วิ
-    */
-
     if (
         elapsed >= HOLD_TIME
     ) {
 
-        chooseAnswer(
-            found
-        );
+        chooseAnswer(found);
 
+        hoverAnswer = null;
 
-        hoverAnswer =
-            null;
-
-
-        hoverStart =
-            0;
+        hoverStart = 0;
 
     }
 
@@ -2452,13 +1960,9 @@ function checkAnswerHover(
 
 function resetHover() {
 
-    hoverAnswer =
-        null;
+    hoverAnswer = null;
 
-
-    hoverStart =
-        0;
-
+    hoverStart = 0;
 
     document
         .querySelectorAll(
@@ -2467,21 +1971,16 @@ function resetHover() {
         .forEach(
             box => {
 
-                box.classList
-                    .remove(
-                        "hovering"
-                    );
-
+                box.classList.remove(
+                    "hovering"
+                );
 
                 const bar =
                     box.querySelector(
                         ".progress"
                     );
 
-
-                if (
-                    bar
-                ) {
+                if (bar) {
 
                     bar.style.width =
                         "0%";
@@ -2490,7 +1989,6 @@ function resetHover() {
 
             }
         );
-
 }
 
 </script>
