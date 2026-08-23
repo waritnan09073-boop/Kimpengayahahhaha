@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
 <title>เกมตอบคำถามด้วยมือ</title>
 
@@ -10,527 +10,526 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 
 <style>
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html, body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, "Noto Sans Thai", sans-serif;
-    background: #111827;
-    color: white;
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,"Noto Sans Thai",sans-serif;
+    background:#111827;
+    color:white;
 }
 
-button,
-select {
-    font-family: inherit;
+button,select{
+    font-family:inherit;
 }
 
-.screen {
-    width: 100vw;
-    height: 100vh;
-    display: none;
+.screen{
+    width:100vw;
+    height:100vh;
+    display:none;
 }
 
-.screen.active {
-    display: flex;
+.screen.active{
+    display:flex;
 }
 
 /* ================= MENU ================= */
 
-#menu {
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
+#menu{
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
 
     background:
-        radial-gradient(circle at top, #2563eb, transparent 50%),
-        #111827;
+    radial-gradient(circle at top,#2563eb,transparent 50%),
+    #111827;
 }
 
-.logo {
-    font-size: clamp(42px, 9vw, 80px);
-    font-weight: 900;
+.logo{
+    font-size:clamp(42px,9vw,80px);
+    font-weight:900;
 }
 
-.subtitle {
-    margin: 10px 0 35px;
-    font-size: clamp(18px, 4vw, 27px);
-    opacity: .8;
+.subtitle{
+    margin:10px 0 35px;
+    font-size:clamp(18px,4vw,27px);
+    opacity:.8;
 }
 
-.menuButtons {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    width: min(80%, 350px);
+.menuButtons{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    width:min(80%,350px);
 }
 
 .menuButton,
-.startBtn {
-    width: 100%;
-    border: none;
-    border-radius: 18px;
-    padding: 17px;
+.startBtn{
+    width:100%;
+    border:none;
+    border-radius:18px;
+    padding:17px;
 
-    background: #2563eb;
-    color: white;
+    background:#2563eb;
+    color:white;
 
-    font-size: 22px;
-    font-weight: bold;
+    font-size:22px;
+    font-weight:bold;
 
-    box-shadow: 0 8px 25px rgba(0,0,0,.3);
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
 }
 
-.menuButton.secondary {
-    background: rgba(255,255,255,.12);
-    border: 2px solid rgba(255,255,255,.2);
+.menuButton.secondary{
+    background:rgba(255,255,255,.12);
+    border:2px solid rgba(255,255,255,.2);
 }
 
 .menuButton:active,
 .startBtn:active,
-.saveButton:active {
-    transform: scale(.96);
+.saveButton:active{
+    transform:scale(.96);
 }
 
-.howto {
-    margin-top: 25px;
-    line-height: 1.7;
-    opacity: .7;
+.howto{
+    margin-top:25px;
+    line-height:1.7;
+    opacity:.7;
 }
 
 /* ================= SETTINGS ================= */
 
-#settings {
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+#settings{
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
 
     background:
-        radial-gradient(circle at top, #7c3aed, transparent 50%),
-        #111827;
+    radial-gradient(circle at top,#7c3aed,transparent 50%),
+    #111827;
 }
 
-.settingsBox {
-    width: min(90%, 500px);
-    padding: 28px;
-    border-radius: 25px;
+.settingsBox{
+    width:min(90%,500px);
+    padding:28px;
+    border-radius:25px;
 
-    background: rgba(0,0,0,.55);
-    backdrop-filter: blur(15px);
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(15px);
 }
 
-.settingsTitle {
-    font-size: 32px;
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 25px;
+.settingsTitle{
+    font-size:32px;
+    font-weight:900;
+    text-align:center;
+    margin-bottom:25px;
 }
 
-.settingRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
+.settingRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
 
-    padding: 17px 0;
+    padding:17px 0;
 
-    border-bottom: 1px solid rgba(255,255,255,.12);
+    border-bottom:1px solid rgba(255,255,255,.12);
 }
 
-.settingName {
-    font-size: 19px;
-    font-weight: bold;
+.settingName{
+    font-size:19px;
+    font-weight:bold;
 }
 
-.switch {
-    position: relative;
-    width: 62px;
-    height: 34px;
-    flex-shrink: 0;
+.switch{
+    position:relative;
+    width:62px;
+    height:34px;
+    flex-shrink:0;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.switch input{
+    opacity:0;
+    width:0;
+    height:0;
 }
 
-.slider {
-    position: absolute;
-    inset: 0;
-    border-radius: 40px;
-    background: #4b5563;
-    transition: .2s;
+.slider{
+    position:absolute;
+    inset:0;
+    border-radius:40px;
+    background:#4b5563;
 }
 
-.slider:before {
-    content: "";
-    position: absolute;
+.slider:before{
+    content:"";
+    position:absolute;
 
-    width: 26px;
-    height: 26px;
+    width:26px;
+    height:26px;
 
-    left: 4px;
-    top: 4px;
+    left:4px;
+    top:4px;
 
-    border-radius: 50%;
-    background: white;
+    border-radius:50%;
+    background:white;
 
-    transition: .2s;
+    transition:.2s;
 }
 
-.switch input:checked + .slider {
-    background: #22c55e;
+.switch input:checked + .slider{
+    background:#22c55e;
 }
 
-.switch input:checked + .slider:before {
-    transform: translateX(28px);
+.switch input:checked + .slider:before{
+    transform:translateX(28px);
 }
 
-.timeSelect {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 12px;
+.timeSelect{
+    padding:10px 15px;
+    border:none;
+    border-radius:12px;
 
-    font-size: 17px;
-    font-weight: bold;
+    font-size:17px;
+    font-weight:bold;
 }
 
-.saveButton {
-    width: 100%;
-    margin-top: 25px;
+.saveButton{
+    width:100%;
+    margin-top:25px;
 
-    border: none;
-    border-radius: 16px;
+    border:none;
+    border-radius:16px;
 
-    padding: 15px;
+    padding:15px;
 
-    background: #22c55e;
-    color: white;
+    background:#22c55e;
+    color:white;
 
-    font-size: 20px;
-    font-weight: bold;
+    font-size:20px;
+    font-weight:bold;
 }
 
 /* ================= INSTRUCTIONS ================= */
 
-#instructions {
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
+#instructions{
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
 
     background:
-        radial-gradient(circle at top, #0891b2, transparent 50%),
-        #111827;
+    radial-gradient(circle at top,#0891b2,transparent 50%),
+    #111827;
 }
 
-.instructionsBox {
-    width: min(90%, 650px);
-    padding: 25px;
-    border-radius: 25px;
+.instructionsBox{
+    width:min(90%,650px);
+    padding:25px;
+    border-radius:25px;
 
-    background: rgba(0,0,0,.55);
-    backdrop-filter: blur(12px);
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(12px);
 }
 
-.instructionsBox h2 {
-    font-size: 32px;
-    margin-top: 0;
+.instructionsBox h2{
+    font-size:32px;
+    margin-top:0;
 }
 
-.instructionsBox p {
-    font-size: 18px;
-    line-height: 1.8;
-    text-align: left;
+.instructionsBox p{
+    font-size:18px;
+    line-height:1.8;
+    text-align:left;
 }
 
 /* ================= GAME ================= */
 
-#game {
-    position: relative;
-    background: #000;
-    overflow: hidden;
+#game{
+    position:relative;
+    background:#000;
+    overflow:hidden;
 }
 
-.cameraBox {
-    position: absolute;
-    inset: 0;
+.cameraBox{
+    position:absolute;
+    inset:0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    background: #000;
-    overflow: hidden;
+    background:#000;
+    overflow:hidden;
 }
 
-#camera {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+#camera{
+    position:absolute;
 
-    transform: scaleX(-1);
+    width:100%;
+    height:100%;
 
-    display: block;
+    object-fit:cover;
+
+    transform:scaleX(-1);
+
+    display:block;
 }
 
-#canvas {
-    position: absolute;
-    inset: 0;
+#canvas{
+    position:absolute;
+    inset:0;
 
-    width: 100%;
-    height: 100%;
+    width:100%;
+    height:100%;
 
-    pointer-events: none;
+    pointer-events:none;
 }
 
-/* ================= TOP UI ================= */
+/* ================= TOP ================= */
 
-.topUI {
-    position: absolute;
+.topUI{
+    position:absolute;
 
-    top: 15px;
-    left: 15px;
-    right: 15px;
+    top:15px;
+    left:15px;
+    right:15px;
 
-    z-index: 20;
+    z-index:20;
 
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
 }
 
-.infoBox {
-    padding: 10px 18px;
+.infoBox{
+    padding:10px 18px;
 
-    border-radius: 15px;
+    border-radius:15px;
 
-    background: rgba(0,0,0,.72);
+    background:rgba(0,0,0,.72);
 
-    backdrop-filter: blur(8px);
+    backdrop-filter:blur(8px);
 
-    font-size: 18px;
-    font-weight: bold;
+    font-size:18px;
+    font-weight:bold;
 }
 
-#timer {
-    color: #60a5fa;
+#timer{
+    color:#60a5fa;
 }
 
 /* ================= QUESTION ================= */
 
-.questionBox {
-    position: absolute;
+.questionBox{
+    position:absolute;
 
-    z-index: 20;
+    z-index:20;
 
-    top: 80px;
-    left: 50%;
+    top:80px;
+    left:50%;
 
-    transform: translateX(-50%);
+    transform:translateX(-50%);
 
-    width: min(88%, 850px);
+    width:min(88%,850px);
 
-    padding: 18px 25px;
+    padding:18px 25px;
 
-    border-radius: 22px;
+    border-radius:22px;
 
-    background: rgba(0,0,0,.75);
+    background:rgba(0,0,0,.75);
 
-    backdrop-filter: blur(10px);
+    backdrop-filter:blur(10px);
 
-    text-align: center;
+    text-align:center;
 }
 
-#question {
-    font-size: clamp(21px, 3.5vw, 36px);
-    font-weight: bold;
-    line-height: 1.4;
+#question{
+    font-size:clamp(21px,3.5vw,36px);
+    font-weight:bold;
+    line-height:1.4;
 }
 
 /* ================= ANSWERS ================= */
 
-.answers {
-    position: absolute;
-    inset: 0;
+.answers{
+    position:absolute;
+    inset:0;
 
-    z-index: 15;
+    z-index:15;
 
-    pointer-events: none;
+    pointer-events:none;
 }
 
-.answer {
-    position: absolute;
+.answer{
+    position:absolute;
 
-    width: min(32vw, 360px);
-    min-height: 105px;
+    width:min(32vw,360px);
+    min-height:105px;
 
-    border: 3px solid rgba(255,255,255,.85);
-    border-radius: 22px;
+    border:3px solid rgba(255,255,255,.85);
+    border-radius:22px;
 
-    background: rgba(17,24,39,.9);
+    background:rgba(17,24,39,.9);
 
-    color: white;
+    color:white;
 
-    padding: 18px;
+    padding:18px;
 
-    font-size: clamp(16px, 2.3vw, 24px);
-    font-weight: bold;
+    font-size:clamp(16px,2.3vw,24px);
+    font-weight:bold;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    text-align: center;
+    text-align:center;
 
-    overflow: hidden;
+    overflow:hidden;
 
     transition:
-        transform .15s ease,
-        border-color .15s ease,
-        box-shadow .15s ease;
+    transform .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease;
 }
 
-/* ================= HITBOX เดิม ================= */
-
-/* 1 = ซ้ายบน */
-.answer:nth-child(1) {
-    left: 4%;
-    top: 43%;
+/* 1 ซ้ายบน */
+.answer:nth-child(1){
+    left:4%;
+    top:43%;
 }
 
-/* 2 = ซ้ายล่าง */
-.answer:nth-child(2) {
-    left: 4%;
-    bottom: 6%;
+/* 2 ซ้ายล่าง */
+.answer:nth-child(2){
+    left:4%;
+    bottom:6%;
 }
 
-/* 3 = ขวาบน */
-.answer:nth-child(3) {
-    right: 4%;
-    top: 43%;
+/* 3 ขวาบน */
+.answer:nth-child(3){
+    right:4%;
+    top:43%;
 }
 
-/* 4 = ขวาล่าง */
-.answer:nth-child(4) {
-    right: 4%;
-    bottom: 6%;
+/* 4 ขวาล่าง */
+.answer:nth-child(4){
+    right:4%;
+    bottom:6%;
 }
 
-.answer.hovering {
-    border-color: #38bdf8;
+.answer.hovering{
+    border-color:#38bdf8;
 
     box-shadow:
-        0 0 30px rgba(56,189,248,.8);
+    0 0 30px rgba(56,189,248,.8);
 
-    transform: scale(1.03);
+    transform:scale(1.03);
 }
 
-.answer.selected {
-    background: rgba(37,99,235,.9);
+.answer.selected{
+    background:rgba(37,99,235,.9);
 }
 
-.progress {
-    position: absolute;
+.progress{
+    position:absolute;
 
-    left: 0;
-    bottom: 0;
+    left:0;
+    bottom:0;
 
-    width: 0%;
-    height: 8px;
+    width:0%;
+    height:8px;
 
-    background: #38bdf8;
+    background:#38bdf8;
 }
 
 /* ================= RESULT ================= */
 
-#result {
-    align-items: center;
-    justify-content: center;
+#result{
+    align-items:center;
+    justify-content:center;
 
-    flex-direction: column;
+    flex-direction:column;
 
-    text-align: center;
+    text-align:center;
 
     background:
-        radial-gradient(circle at top, #16a34a, transparent 50%),
-        #111827;
+    radial-gradient(circle at top,#16a34a,transparent 50%),
+    #111827;
 }
 
-.resultTitle {
-    font-size: clamp(40px, 8vw, 65px);
-    font-weight: 900;
+.resultTitle{
+    font-size:clamp(40px,8vw,65px);
+    font-weight:900;
 }
 
-#scoreText {
-    font-size: 28px;
-    margin: 20px;
+#scoreText{
+    font-size:28px;
+    margin:20px;
 }
 
-.resultButtons {
-    width: min(80%, 350px);
+.resultButtons{
+    width:min(80%,350px);
 }
 
 /* ================= MOBILE ================= */
 
-@media (max-width: 700px) {
+@media(max-width:700px){
 
-    .infoBox {
-        padding: 8px 11px;
-        font-size: 14px;
+    .infoBox{
+        padding:8px 11px;
+        font-size:14px;
     }
 
-    .topUI {
-        top: 8px;
-        left: 8px;
-        right: 8px;
+    .topUI{
+        top:8px;
+        left:8px;
+        right:8px;
     }
 
-    .questionBox {
-        top: 65px;
-        width: 86%;
-        padding: 12px 15px;
+    .questionBox{
+        top:65px;
+        width:86%;
+        padding:12px 15px;
     }
 
-    #question {
-        font-size: 20px;
+    #question{
+        font-size:20px;
     }
 
-    .answer {
-        width: 42vw;
-        min-height: 90px;
+    .answer{
+        width:42vw;
+        min-height:90px;
 
-        padding: 10px;
+        padding:10px;
 
-        font-size: 16px;
-        border-radius: 18px;
+        font-size:16px;
+        border-radius:18px;
     }
 
-    .answer:nth-child(1) {
-        left: 3%;
-        top: 43%;
+    .answer:nth-child(1){
+        left:3%;
+        top:43%;
     }
 
-    .answer:nth-child(2) {
-        left: 3%;
-        bottom: 5%;
+    .answer:nth-child(2){
+        left:3%;
+        bottom:5%;
     }
 
-    .answer:nth-child(3) {
-        right: 3%;
-        top: 43%;
+    .answer:nth-child(3){
+        right:3%;
+        top:43%;
     }
 
-    .answer:nth-child(4) {
-        right: 3%;
-        bottom: 5%;
+    .answer:nth-child(4){
+        right:3%;
+        bottom:5%;
     }
 }
 </style>
@@ -538,9 +537,7 @@ select {
 
 <body>
 
-<!-- =====================================================
-     MENU
-===================================================== -->
+<!-- ================= MENU ================= -->
 
 <section id="menu" class="screen active">
 
@@ -584,9 +581,7 @@ select {
 </section>
 
 
-<!-- =====================================================
-     SETTINGS
-===================================================== -->
+<!-- ================= SETTINGS ================= -->
 
 <section id="settings" class="screen">
 
@@ -665,17 +660,13 @@ select {
 </section>
 
 
-<!-- =====================================================
-     INSTRUCTIONS
-===================================================== -->
+<!-- ================= INSTRUCTIONS ================= -->
 
 <section id="instructions" class="screen">
 
     <div class="instructionsBox">
 
-        <h2>
-            ❓ วิธีเล่น
-        </h2>
+        <h2>❓ วิธีเล่น</h2>
 
         <p>
             ☝️ ใช้นิ้วชี้ควบคุมจุดสีฟ้า
@@ -688,7 +679,7 @@ select {
             = สีเหลือง
             <br><br>
 
-            🎯 เลื่อนนิ้วชี้ไปบนคำตอบ
+            🎯 ลากนิ้วชี้ไปบนคำตอบ
             <br>
 
             ⏳ ค้างไว้ 5 วินาที
@@ -714,9 +705,7 @@ select {
 </section>
 
 
-<!-- =====================================================
-     GAME
-===================================================== -->
+<!-- ================= GAME ================= -->
 
 <section id="game" class="screen">
 
@@ -772,9 +761,7 @@ select {
 </section>
 
 
-<!-- =====================================================
-     RESULT
-===================================================== -->
+<!-- ================= RESULT ================= -->
 
 <section id="result" class="screen">
 
@@ -818,22 +805,16 @@ const questions = [
 
     {
         question:
-            "คำถาม 1: คิมและซีเป็นอะไรกัน 🥵👁️👄👁️",
+        "คำถาม 1: คิมและซีเป็นอะไรกัน 🥵👁️👄👁️",
 
-        answers: [
-
+        answers:[
             "เป็นคนสวยค่ะ*หยิ่ง* 🙄😱🌹🌹",
-
             "เป็นคนดีค่ะ 😇👁️👅👁️",
-
             "เป็นเกย์ค่ะ 🎀😳🥵",
-
             "ผิดทุกข้อค่ะ*ไม่สน* 😒🙄🙄"
-
         ],
 
-        /* เฉลยข้อ 3 */
-        correct: 2
+        correct:2
     }
 
 ];
@@ -843,77 +824,61 @@ const questions = [
    SETTINGS
 ===================================================== */
 
-let timeLimitEnabled = true;
+let timeLimitEnabled=true;
+let questionTime=15;
 
-let questionTime = 15;
-
-const HOLD_TIME = 5000;
+const HOLD_TIME=5000;
 
 
 /* =====================================================
-   GAME VARIABLES
+   GAME
 ===================================================== */
 
-let currentQuestion = 0;
+let currentQuestion=0;
+let score=0;
 
-let score = 0;
+let questionTimer=null;
+let timeLeft=15;
 
-let questionTimer = null;
+let hoverAnswer=null;
+let hoverStart=0;
 
-let timeLeft = 15;
-
-let hoverAnswer = null;
-
-let hoverStart = 0;
-
-
-/* ป้องกันการเปิด Camera ซ้อน */
-
-let cameraRunning = false;
+let cameraRunning=false;
 
 
 /* =====================================================
    SMOOTHING
 ===================================================== */
 
-const smoothPoints = [];
-
-const SMOOTHING = 0.7;
+const smoothPoints=[];
+const SMOOTHING=0.72;
 
 
 /* =====================================================
    DOM
 ===================================================== */
 
-const video =
-    document.getElementById("camera");
-
-const canvas =
-    document.getElementById("canvas");
-
-const ctx =
-    canvas.getContext("2d");
+const video=document.getElementById("camera");
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
 
 
 /* =====================================================
    SCREEN
 ===================================================== */
 
-function showScreen(name) {
+function showScreen(name){
 
     document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-
-            screen.classList.remove(
-                "active"
-            );
-
-        });
+    .querySelectorAll(".screen")
+    .forEach(screen=>{
+        screen.classList.remove("active");
+    });
 
     document
-        .getElementById(name)
-        .classList.add("active");
+    .getElementById(name)
+    .classList.add("active");
+
 }
 
 
@@ -921,55 +886,56 @@ function showScreen(name) {
    SETTINGS
 ===================================================== */
 
-function openSettings() {
+function openSettings(){
 
     document.getElementById(
         "timeLimitToggle"
-    ).checked = timeLimitEnabled;
+    ).checked=timeLimitEnabled;
 
     document.getElementById(
         "timeSelect"
-    ).value = questionTime;
+    ).value=questionTime;
 
     updateTimeSetting();
 
     showScreen("settings");
+
 }
 
 
-function updateTimeSetting() {
+function updateTimeSetting(){
 
-    const enabled =
+    const enabled=
         document.getElementById(
             "timeLimitToggle"
         ).checked;
 
-    const row =
+    const row=
         document.getElementById(
             "timeRow"
         );
 
-    const select =
+    const select=
         document.getElementById(
             "timeSelect"
         );
 
-    row.style.opacity =
-        enabled ? "1" : ".4";
+    row.style.opacity=
+        enabled?"1":".4";
 
-    select.disabled =
-        !enabled;
+    select.disabled=!enabled;
+
 }
 
 
-function saveSettings() {
+function saveSettings(){
 
-    timeLimitEnabled =
+    timeLimitEnabled=
         document.getElementById(
             "timeLimitToggle"
         ).checked;
 
-    questionTime =
+    questionTime=
         Number(
             document.getElementById(
                 "timeSelect"
@@ -977,12 +943,14 @@ function saveSettings() {
         );
 
     showScreen("menu");
+
 }
 
 
-function openInstructions() {
+function openInstructions(){
 
     showScreen("instructions");
+
 }
 
 
@@ -990,23 +958,21 @@ function openInstructions() {
    START GAME
 ===================================================== */
 
-async function startGame() {
+async function startGame(){
 
     clearInterval(questionTimer);
 
-    currentQuestion = 0;
+    currentQuestion=0;
+    score=0;
 
-    score = 0;
+    hoverAnswer=null;
+    hoverStart=0;
 
-    hoverAnswer = null;
-
-    hoverStart = 0;
-
-    smoothPoints.length = 0;
+    smoothPoints.length=0;
 
     document.getElementById(
         "score"
-    ).textContent = "0";
+    ).textContent="0";
 
     showScreen("game");
 
@@ -1018,67 +984,74 @@ async function startGame() {
 
 
 /* =====================================================
-   START CAMERA
+   CAMERA
 ===================================================== */
 
-async function startCamera() {
-
-    /*
-       ถ้ามีกล้องเก่าอยู่
-       ปิดก่อน
-    */
+async function startCamera(){
 
     stopCamera();
 
-    try {
+    try{
 
-        const stream =
-            await navigator.mediaDevices
-            .getUserMedia({
+        if(
+            !navigator.mediaDevices ||
+            !navigator.mediaDevices.getUserMedia
+        ){
 
-                video: {
+            throw new Error(
+                "Camera API unavailable"
+            );
 
-                    facingMode: "user",
+        }
 
-                    width: {
-                        ideal: 1280
+        const stream=
+            await navigator.mediaDevices.getUserMedia({
+
+                video:{
+                    facingMode:"user",
+
+                    width:{
+                        ideal:1280
                     },
 
-                    height: {
-                        ideal: 720
+                    height:{
+                        ideal:720
                     },
 
-                    frameRate: {
-                        ideal: 30
+                    frameRate:{
+                        ideal:30
                     }
-
                 },
 
-                audio: false
+                audio:false
 
             });
 
 
-        video.srcObject =
-            stream;
+        video.srcObject=stream;
 
         await video.play();
 
-        cameraRunning = true;
+        cameraRunning=true;
+
+        resizeCanvas();
 
         startCameraAI();
 
-    } catch (error) {
+    }
+    catch(error){
 
         console.error(error);
 
-        cameraRunning = false;
+        cameraRunning=false;
 
         alert(
-            "เปิดกล้องไม่ได้ 😢\n\n" +
+            "เปิดกล้องไม่ได้ 😢\n\n"+
             "กรุณาอนุญาตให้เว็บไซต์ใช้กล้อง"
         );
+
     }
+
 }
 
 
@@ -1086,93 +1059,128 @@ async function startCamera() {
    STOP CAMERA
 ===================================================== */
 
-function stopCamera() {
+function stopCamera(){
 
-    cameraRunning = false;
+    cameraRunning=false;
 
-    if (video.srcObject) {
+    if(video.srcObject){
 
         video.srcObject
-            .getTracks()
-            .forEach(track => {
-                track.stop();
-            });
+        .getTracks()
+        .forEach(track=>{
+            track.stop();
+        });
 
-        video.srcObject = null;
+        video.srcObject=null;
+
     }
+
 }
 
 
 /* =====================================================
-   SHOW QUESTION
+   CANVAS RESIZE
 ===================================================== */
 
-function showQuestion() {
+function resizeCanvas(){
+
+    const rect=
+        canvas.getBoundingClientRect();
+
+    const dpr=
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    canvas.width=
+        Math.round(rect.width*dpr);
+
+    canvas.height=
+        Math.round(rect.height*dpr);
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+/* =====================================================
+   QUESTION
+===================================================== */
+
+function showQuestion(){
 
     clearInterval(questionTimer);
 
-    if (
-        currentQuestion >=
-        questions.length
-    ) {
+    if(
+        currentQuestion>=questions.length
+    ){
 
         endGame();
-
         return;
+
     }
 
-    const q =
+    const q=
         questions[currentQuestion];
 
     document.getElementById(
         "questionNumber"
-    ).textContent =
-        currentQuestion + 1;
+    ).textContent=
+        currentQuestion+1;
 
     document.getElementById(
         "question"
-    ).textContent =
+    ).textContent=
         q.question;
 
     document.getElementById(
         "score"
-    ).textContent =
+    ).textContent=
         score;
 
-    const answers =
+    const answers=
         document.getElementById(
             "answers"
         );
 
-    answers.innerHTML = "";
+    answers.innerHTML="";
 
-    q.answers.forEach(
-        (text, index) => {
+    q.answers.forEach((text,index)=>{
 
-            const div =
-                document.createElement(
-                    "div"
-                );
+        const div=
+            document.createElement("div");
 
-            div.className =
-                "answer";
+        div.className="answer";
 
-            div.dataset.index =
-                index;
+        div.dataset.index=index;
 
-            div.innerHTML = `
-                <span>${text}</span>
-                <div class="progress"></div>
-            `;
+        div.innerHTML=`
+            <span>${text}</span>
+            <div class="progress"></div>
+        `;
 
-            answers.appendChild(div);
+        answers.appendChild(div);
 
-        }
-    );
+    });
 
     resetHover();
 
     startQuestionTimer();
+
 }
 
 
@@ -1180,143 +1188,124 @@ function showQuestion() {
    TIMER
 ===================================================== */
 
-function startQuestionTimer() {
+function startQuestionTimer(){
 
     clearInterval(questionTimer);
 
-    const timerBox =
+    const timerBox=
         document.getElementById(
             "timerBox"
         );
 
-    if (!timeLimitEnabled) {
+    if(!timeLimitEnabled){
 
-        timerBox.style.display =
-            "none";
+        timerBox.style.display="none";
 
         return;
+
     }
 
-    timerBox.style.display =
-        "block";
+    timerBox.style.display="block";
 
-    timeLeft =
-        questionTime;
+    timeLeft=questionTime;
 
     document.getElementById(
         "timer"
-    ).textContent =
-        timeLeft;
+    ).textContent=timeLeft;
 
-    questionTimer =
-        setInterval(() => {
+    questionTimer=
+        setInterval(()=>{
 
             timeLeft--;
 
             document.getElementById(
                 "timer"
-            ).textContent =
-                timeLeft;
+            ).textContent=timeLeft;
 
-            if (timeLeft <= 0) {
+            if(timeLeft<=0){
 
-                clearInterval(
-                    questionTimer
-                );
+                clearInterval(questionTimer);
 
                 nextQuestion();
 
             }
 
-        }, 1000);
+        },1000);
+
 }
 
 
 /* =====================================================
-   CHOOSE ANSWER
+   CHOOSE
 ===================================================== */
 
-function chooseAnswer(index) {
+function chooseAnswer(index){
 
     clearInterval(questionTimer);
 
-    const q =
+    const q=
         questions[currentQuestion];
 
-    const boxes =
+    const boxes=
         document.querySelectorAll(
             ".answer"
         );
 
-    if (boxes[index]) {
+    if(boxes[index]){
 
         boxes[index]
-            .classList
-            .add("selected");
+        .classList
+        .add("selected");
+
     }
 
-    /*
-       ถูก
-    */
-
-    if (
-        index === q.correct
-    ) {
+    if(index===q.correct){
 
         score++;
 
         document.getElementById(
             "score"
-        ).textContent =
-            score;
+        ).textContent=score;
 
-        setTimeout(() => {
-
+        setTimeout(()=>{
             nextQuestion();
+        },500);
 
-        }, 500);
+    }
+    else{
+
+        setTimeout(()=>{
+            nextQuestion();
+        },300);
 
     }
 
-    /*
-       ผิด
-    */
-
-    else {
-
-        setTimeout(() => {
-
-            nextQuestion();
-
-        }, 300);
-
-    }
 }
 
 
 /* =====================================================
-   NEXT QUESTION
+   NEXT
 ===================================================== */
 
-function nextQuestion() {
+function nextQuestion(){
 
     clearInterval(questionTimer);
 
-    hoverAnswer = null;
-
-    hoverStart = 0;
+    hoverAnswer=null;
+    hoverStart=0;
 
     currentQuestion++;
 
     showQuestion();
+
 }
 
 
 /* =====================================================
-   END GAME
+   END
 ===================================================== */
 
-function endGame() {
+function endGame(){
 
     clearInterval(questionTimer);
 
@@ -1326,86 +1315,65 @@ function endGame() {
 
     document.getElementById(
         "scoreText"
-    ).textContent =
+    ).textContent=
         `คุณได้ ${score} / ${questions.length} คะแนน`;
+
 }
 
 
 /* =====================================================
-   RESTART GAME
+   RESTART
 ===================================================== */
 
-async function restartGame() {
-
-    /*
-       หยุดของเดิมก่อน
-    */
+async function restartGame(){
 
     clearInterval(questionTimer);
 
     stopCamera();
 
-    /*
-       รีเซ็ตทุกอย่าง
-    */
+    currentQuestion=0;
+    score=0;
 
-    currentQuestion = 0;
+    timeLeft=questionTime;
 
-    score = 0;
+    hoverAnswer=null;
+    hoverStart=0;
 
-    timeLeft = questionTime;
-
-    hoverAnswer = null;
-
-    hoverStart = 0;
-
-    smoothPoints.length = 0;
+    smoothPoints.length=0;
 
     document.getElementById(
         "score"
-    ).textContent = "0";
-
-    /*
-       ไปหน้าเกม
-    */
+    ).textContent="0";
 
     showScreen("game");
 
-    /*
-       แสดงข้อแรก
-    */
-
     showQuestion();
 
-    /*
-       เปิดกล้องใหม่
-    */
-
     await startCamera();
+
 }
 
 
 /* =====================================================
-   BACK TO MENU
+   BACK MENU
 ===================================================== */
 
-function backToMenu() {
+function backToMenu(){
 
     clearInterval(questionTimer);
 
     stopCamera();
 
-    currentQuestion = 0;
+    currentQuestion=0;
+    score=0;
 
-    score = 0;
+    hoverAnswer=null;
+    hoverStart=0;
 
-    hoverAnswer = null;
-
-    hoverStart = 0;
-
-    smoothPoints.length = 0;
+    smoothPoints.length=0;
 
     showScreen("menu");
+
 }
 
 
@@ -1413,101 +1381,120 @@ function backToMenu() {
    MEDIAPIPE
 ===================================================== */
 
-let hands = null;
-
-let cameraAI = null;
+let hands=null;
+let cameraAI=null;
 
 
 /* =====================================================
-   START CAMERA AI
+   START AI
 ===================================================== */
 
-function startCameraAI() {
+function startCameraAI(){
 
-    /*
-       ถ้ามี AI เดิมอยู่
-       ไม่สร้างเพิ่ม
-    */
+    if(cameraAI){
 
-    if (cameraAI) {
-
-        try {
+        try{
             cameraAI.stop();
-        } catch(e) {}
+        }catch(e){}
+
+        cameraAI=null;
+
     }
 
-    if (hands) {
+    if(hands){
 
-        try {
+        try{
             hands.close();
-        } catch(e) {}
+        }catch(e){}
+
+        hands=null;
+
     }
 
 
-    hands =
-        new Hands({
+    hands=new Hands({
 
-            locateFile: (file) => {
+        locateFile:(file)=>{
 
-                return (
-                    "https://cdn.jsdelivr.net/npm/" +
-                    "@mediapipe/hands/" +
-                    file
-                );
+            return
+            "https://cdn.jsdelivr.net/npm/@mediapipe/hands/"+file;
 
-            }
-
-        });
-
-
-    hands.setOptions({
-
-        maxNumHands: 1,
-
-        modelComplexity: 1,
-
-        minDetectionConfidence: 0.7,
-
-        minTrackingConfidence: 0.7
+        }
 
     });
 
 
-    hands.onResults(
-        onResults
-    );
+    hands.setOptions({
+
+        maxNumHands:1,
+
+        modelComplexity:1,
+
+        minDetectionConfidence:.65,
+
+        minTrackingConfidence:.65
+
+    });
 
 
-    cameraAI =
+    hands.onResults(onResults);
+
+
+    cameraAI=
         new Camera(
             video,
             {
 
-                onFrame:
-                    async () => {
+                onFrame:async()=>{
 
-                        if (
-                            cameraRunning &&
-                            video.readyState >= 2
-                        ) {
+                    if(
+                        cameraRunning &&
+                        video.readyState>=2
+                    ){
 
-                            await hands.send({
-                                image: video
-                            });
+                        await hands.send({
+                            image:video
+                        });
 
-                        }
+                    }
 
-                    },
+                },
 
-                width: 1280,
-
-                height: 720
+                width:1280,
+                height:720
 
             }
         );
 
 
     cameraAI.start();
+
+}
+
+
+/* =====================================================
+   COORDINATE
+===================================================== */
+
+/*
+   สำคัญ:
+   ภาพกล้องถูก mirror ด้วย CSS
+   ดังนั้นพิกัด X ต้องกลับด้านเหมือนกัน
+*/
+
+function landmarkToCanvas(p){
+
+    const rect=
+        canvas.getBoundingClientRect();
+
+    return{
+
+        x:(1-p.x)*rect.width,
+
+        y:p.y*rect.height
+
+    };
+
 }
 
 
@@ -1515,13 +1502,39 @@ function startCameraAI() {
    RESULTS
 ===================================================== */
 
-function onResults(results) {
+function onResults(results){
 
-    canvas.width =
-        canvas.clientWidth;
+    const rect=
+        canvas.getBoundingClientRect();
 
-    canvas.height =
-        canvas.clientHeight;
+    if(
+        rect.width<=0 ||
+        rect.height<=0
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       Canvas ใช้ CSS pixel
+       เพื่อให้ตรงกับ getBoundingClientRect()
+    */
+
+    if(
+        canvas.width!==Math.round(rect.width) ||
+        canvas.height!==Math.round(rect.height)
+    ){
+
+        canvas.width=
+            Math.round(rect.width);
+
+        canvas.height=
+            Math.round(rect.height);
+
+    }
+
 
     ctx.clearRect(
         0,
@@ -1530,126 +1543,114 @@ function onResults(results) {
         canvas.height
     );
 
-    if (
+
+    if(
         !results.multiHandLandmarks ||
-        results.multiHandLandmarks.length === 0
-    ) {
+        results.multiHandLandmarks.length===0
+    ){
 
         resetHover();
 
         return;
+
     }
 
-    const raw =
+
+    const raw=
         results.multiHandLandmarks[0];
 
-    const landmarks =
+    const landmarks=
         smoothLandmarks(raw);
+
 
     drawHand(landmarks);
 
+
     /*
-       นิ้วชี้ = จุด 8
+       นิ้วชี้ จุด 8
     */
 
-    const indexTip =
-        landmarks[8];
-
-    const x =
-        (1 - indexTip.x) *
-        canvas.width;
-
-    const y =
-        indexTip.y *
-        canvas.height;
+    const indexTip=
+        landmarkToCanvas(
+            landmarks[8]
+        );
 
 
     /*
-       จุดปลายนิ้วชี้
-       สีฟ้า
+       จุดนิ้วชี้สีฟ้า
     */
 
     ctx.beginPath();
 
     ctx.arc(
-        x,
-        y,
+        indexTip.x,
+        indexTip.y,
         14,
         0,
-        Math.PI * 2
+        Math.PI*2
     );
 
-    ctx.fillStyle =
-        "#38bdf8";
+    ctx.fillStyle="#38bdf8";
 
     ctx.fill();
 
-    ctx.strokeStyle =
-        "white";
+    ctx.strokeStyle="white";
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth=3;
 
     ctx.stroke();
 
 
-    checkAnswerHover(x, y);
+    checkAnswerHover(
+        indexTip.x,
+        indexTip.y
+    );
+
 }
 
 
 /* =====================================================
-   SMOOTH
+   SMOOTHING
 ===================================================== */
 
-function smoothLandmarks(points) {
+function smoothLandmarks(points){
 
-    if (
-        smoothPoints.length === 0
-    ) {
+    if(smoothPoints.length===0){
 
-        points.forEach(p => {
+        points.forEach(p=>{
 
             smoothPoints.push({
-
-                x: p.x,
-
-                y: p.y,
-
-                z: p.z
-
+                x:p.x,
+                y:p.y,
+                z:p.z
             });
 
         });
 
         return smoothPoints;
+
     }
 
 
-    points.forEach(
-        (p, i) => {
+    points.forEach((p,i)=>{
 
-            smoothPoints[i].x =
-                smoothPoints[i].x *
-                SMOOTHING +
-                p.x *
-                (1 - SMOOTHING);
+        smoothPoints[i].x=
+            smoothPoints[i].x*SMOOTHING+
+            p.x*(1-SMOOTHING);
 
-            smoothPoints[i].y =
-                smoothPoints[i].y *
-                SMOOTHING +
-                p.y *
-                (1 - SMOOTHING);
+        smoothPoints[i].y=
+            smoothPoints[i].y*SMOOTHING+
+            p.y*(1-SMOOTHING);
 
-            smoothPoints[i].z =
-                smoothPoints[i].z *
-                SMOOTHING +
-                p.z *
-                (1 - SMOOTHING);
+        smoothPoints[i].z=
+            smoothPoints[i].z*SMOOTHING+
+            p.z*(1-SMOOTHING);
 
-        }
-    );
+    });
 
 
     return smoothPoints;
+
 }
 
 
@@ -1657,132 +1658,117 @@ function smoothLandmarks(points) {
    DRAW HAND
 ===================================================== */
 
-function drawHand(landmarks) {
+function drawHand(landmarks){
 
-    const fingers = [
+    const fingers=[
 
         {
-            points: [1,2,3,4],
-            color: "#facc15"
+            points:[1,2,3,4],
+            color:"#facc15"
         },
 
         {
-            points: [5,6,7,8],
-            color: "#38bdf8"
+            points:[5,6,7,8],
+            color:"#38bdf8"
         },
 
         {
-            points: [9,10,11,12],
-            color: "#facc15"
+            points:[9,10,11,12],
+            color:"#facc15"
         },
 
         {
-            points: [13,14,15,16],
-            color: "#facc15"
+            points:[13,14,15,16],
+            color:"#facc15"
         },
 
         {
-            points: [17,18,19,20],
-            color: "#facc15"
+            points:[17,18,19,20],
+            color:"#facc15"
         }
 
     ];
 
 
-    fingers.forEach(
-        finger => {
+    fingers.forEach(finger=>{
+
+        ctx.beginPath();
+
+        finger.points.forEach((point,i)=>{
+
+            const p=
+                landmarkToCanvas(
+                    landmarks[point]
+                );
+
+            if(i===0){
+
+                ctx.moveTo(
+                    p.x,
+                    p.y
+                );
+
+            }
+            else{
+
+                ctx.lineTo(
+                    p.x,
+                    p.y
+                );
+
+            }
+
+        });
+
+
+        ctx.strokeStyle=
+            finger.color;
+
+        ctx.lineWidth=7;
+
+        ctx.lineCap="round";
+
+        ctx.lineJoin="round";
+
+        ctx.stroke();
+
+
+        /*
+           จุดข้อต่อ
+        */
+
+        finger.points.forEach(point=>{
+
+            const p=
+                landmarkToCanvas(
+                    landmarks[point]
+                );
 
             ctx.beginPath();
 
-            finger.points.forEach(
-                (point, i) => {
-
-                    const p =
-                        landmarks[point];
-
-                    const x =
-                        (1 - p.x) *
-                        canvas.width;
-
-                    const y =
-                        p.y *
-                        canvas.height;
-
-                    if (i === 0) {
-
-                        ctx.moveTo(
-                            x,
-                            y
-                        );
-
-                    } else {
-
-                        ctx.lineTo(
-                            x,
-                            y
-                        );
-
-                    }
-
-                }
+            ctx.arc(
+                p.x,
+                p.y,
+                5,
+                0,
+                Math.PI*2
             );
 
-
-            ctx.strokeStyle =
+            ctx.fillStyle=
                 finger.color;
 
-            ctx.lineWidth = 7;
+            ctx.fill();
 
-            ctx.lineCap =
-                "round";
+        });
 
-            ctx.lineJoin =
-                "round";
-
-            ctx.stroke();
-
-
-            finger.points.forEach(
-                point => {
-
-                    const p =
-                        landmarks[point];
-
-                    const x =
-                        (1 - p.x) *
-                        canvas.width;
-
-                    const y =
-                        p.y *
-                        canvas.height;
-
-                    ctx.beginPath();
-
-                    ctx.arc(
-                        x,
-                        y,
-                        5,
-                        0,
-                        Math.PI * 2
-                    );
-
-                    ctx.fillStyle =
-                        finger.color;
-
-                    ctx.fill();
-
-                }
-            );
-
-        }
-    );
+    });
 
 
     /*
        ฝ่ามือ
     */
 
-    const palmConnections = [
+    const palmConnections=[
 
         [0,5],
         [5,9],
@@ -1793,161 +1779,144 @@ function drawHand(landmarks) {
     ];
 
 
-    palmConnections.forEach(
-        connection => {
+    palmConnections.forEach(connection=>{
 
-            const a =
-                landmarks[
-                    connection[0]
-                ];
-
-            const b =
-                landmarks[
-                    connection[1]
-                ];
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                (1 - a.x) *
-                canvas.width,
-
-                a.y *
-                canvas.height
+        const a=
+            landmarkToCanvas(
+                landmarks[connection[0]]
             );
 
-            ctx.lineTo(
-                (1 - b.x) *
-                canvas.width,
-
-                b.y *
-                canvas.height
+        const b=
+            landmarkToCanvas(
+                landmarks[connection[1]]
             );
 
-            ctx.strokeStyle =
-                "rgba(255,255,255,.85)";
+        ctx.beginPath();
 
-            ctx.lineWidth = 4;
+        ctx.moveTo(
+            a.x,
+            a.y
+        );
 
-            ctx.stroke();
+        ctx.lineTo(
+            b.x,
+            b.y
+        );
 
-        }
-    );
+        ctx.strokeStyle=
+            "rgba(255,255,255,.85)";
+
+        ctx.lineWidth=4;
+
+        ctx.lineCap="round";
+
+        ctx.stroke();
+
+    });
+
 }
 
 
 /* =====================================================
    HITBOX
-   ไม่เปลี่ยนตำแหน่ง Hitbox
+   ไม่เปลี่ยนตำแหน่ง
 ===================================================== */
 
-function checkAnswerHover(x, y) {
+function checkAnswerHover(x,y){
 
-    const boxes =
+    const boxes=
         document.querySelectorAll(
             ".answer"
         );
 
-    let found = null;
+    let found=null;
 
 
-    boxes.forEach(
-        (box, index) => {
+    boxes.forEach((box,index)=>{
 
-            const rect =
-                box.getBoundingClientRect();
+        const rect=
+            box.getBoundingClientRect();
 
-            if (
-                x >= rect.left &&
-                x <= rect.right &&
-                y >= rect.top &&
-                y <= rect.bottom
-            ) {
 
-                found = index;
+        if(
+            x>=rect.left &&
+            x<=rect.right &&
+            y>=rect.top &&
+            y<=rect.bottom
+        ){
 
-            }
+            found=index;
 
         }
-    );
+
+    });
 
 
-    if (
-        found === null
-    ) {
+    if(found===null){
 
         resetHover();
 
         return;
+
     }
 
 
-    if (
-        hoverAnswer !== found
-    ) {
+    if(hoverAnswer!==found){
 
-        hoverAnswer =
-            found;
+        hoverAnswer=found;
 
-        hoverStart =
+        hoverStart=
             performance.now();
 
-        boxes.forEach(
-            box => {
+        boxes.forEach(box=>{
 
-                box.classList.remove(
-                    "hovering"
-                );
+            box.classList.remove(
+                "hovering"
+            );
 
-            }
-        );
+        });
 
     }
 
 
     boxes[found]
-        .classList
-        .add("hovering");
+    .classList
+    .add("hovering");
 
 
-    const elapsed =
-        performance.now() -
+    const elapsed=
+        performance.now()-
         hoverStart;
 
 
-    const progress =
+    const progress=
         Math.min(
-            elapsed / HOLD_TIME,
+            elapsed/5000,
             1
-        ) * 100;
+        )*100;
 
 
-    const progressBar =
+    const progressBar=
         boxes[found]
-            .querySelector(
-                ".progress"
-            );
+        .querySelector(
+            ".progress"
+        );
 
 
-    if (
-        progressBar
-    ) {
+    if(progressBar){
 
-        progressBar.style.width =
-            progress + "%";
+        progressBar.style.width=
+            progress+"%";
 
     }
 
 
-    if (
-        elapsed >= HOLD_TIME
-    ) {
+    if(elapsed>=5000){
 
         chooseAnswer(found);
 
-        hoverAnswer = null;
-
-        hoverStart = 0;
+        hoverAnswer=null;
+        hoverStart=0;
 
     }
 
@@ -1955,40 +1924,35 @@ function checkAnswerHover(x, y) {
 
 
 /* =====================================================
-   RESET HOVER
+   RESET
 ===================================================== */
 
-function resetHover() {
+function resetHover(){
 
-    hoverAnswer = null;
-
-    hoverStart = 0;
+    hoverAnswer=null;
+    hoverStart=0;
 
     document
-        .querySelectorAll(
-            ".answer"
-        )
-        .forEach(
-            box => {
+    .querySelectorAll(".answer")
+    .forEach(box=>{
 
-                box.classList.remove(
-                    "hovering"
-                );
-
-                const bar =
-                    box.querySelector(
-                        ".progress"
-                    );
-
-                if (bar) {
-
-                    bar.style.width =
-                        "0%";
-
-                }
-
-            }
+        box.classList.remove(
+            "hovering"
         );
+
+        const bar=
+            box.querySelector(
+                ".progress"
+            );
+
+        if(bar){
+
+            bar.style.width="0%";
+
+        }
+
+    });
+
 }
 
 </script>
